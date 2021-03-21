@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html  lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fff" id="theme-color">
+  <meta name="description" content="Hexo">
+  <link rel="icon" href="/img/Kaze.png">
+  <title>MySQL事务隔离级别和实现原理</title>
+  
+  
+  <meta property="og:title" content="MySQL事务隔离级别和实现原理">
+  
+  
+  <meta property="og:url" content="https://sacharn.github.io/2021/03/20/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/index.html">
+  
+  
+  <meta property="og:img" content="/img/aze.png">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2021-03-20">
+  <meta property="og:article:modified_time" content="2021-03-21">
+  <meta property="og:article:author" content="燕树城">
+  
+  
+  
+  
+  
+  <script>
+    // control reverse button
+    var reverseDarkList = {
+      dark: 'light',
+      light: 'dark'
+    };
+    var themeColor = {
+      dark: '#1c1c1e',
+      light: '#fff'
+    }
+    // get the data of css prefers-color-scheme
+    var getCssMediaQuery = function() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    };
+    // reverse current darkmode setting function
+    var reverseDarkModeSetting = function() {
+      var setting = localStorage.getItem('user-color-scheme');
+      if(reverseDarkList[setting]) {
+        setting = reverseDarkList[setting];
+      } else if(setting === null) {
+        setting = reverseDarkList[getCssMediaQuery()];
+      } else {
+        return;
+      }
+      localStorage.setItem('user-color-scheme', setting);
+      return setting;
+    };
+    // apply current darkmode setting
+    var setDarkmode = function(mode) {
+      var setting = mode || localStorage.getItem('user-color-scheme');
+      if(setting === getCssMediaQuery()) {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else if(reverseDarkList[setting]) {
+        document.documentElement.setAttribute('data-user-color-scheme', setting);
+        document.getElementById('theme-color').content = themeColor[setting];
+      } else {
+        document.documentElement.removeAttribute('data-user-color-scheme');
+        localStorage.removeItem('user-color-scheme');
+        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
+      }
+    };
+    setDarkmode();
+  </script>
+  <script>
+    function loadScript(url, cb) {
+      var script = document.createElement('script');
+      script.src = url;
+      if (cb) script.onload = cb;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  </script>
+  
+  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
+  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
+  
+  <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
+  <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
+  
+  
+  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
+  
+  
+  
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
+
+  
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
+
+  
+  
+<link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <div class="wrapper">
+    
+    <nav class="navbar">
+  <div class="navbar-logo">
+    <span class="navbar-logo-main">
+      
+      <img class="navbar-logo-img" src="/img/Kaze.png" alt="logo">
+      
+      <span class="navbar-logo-dsc">燕子坞</span>
+    </span>
+  </div>
+  <div class="navbar-menu">
+    
+    <a href="/" class="navbar-menu-item">
+    
+    Home
+    
+    </a>
+    
+    <a href="/archives" class="navbar-menu-item">
+    
+    Archive
+    
+    </a>
+    
+    <a href="/tags" class="navbar-menu-item">
+    
+    Tags
+    
+    </a>
+    
+    <a href="/categories" class="navbar-menu-item">
+    
+    Categories
+    
+    </a>
+    
+    <a href="/about" class="navbar-menu-item">
+    
+    About
+    
+    </a>
+    
+    <a href="/links" class="navbar-menu-item">
+    
+    Friends
+    
+    </a>
+    
+    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
+    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+  </div>
+</nav>
+    
+    <div id="local-search" style="display: none;">
+      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
+      <div id="search-content"></div>
+    </div>
+    
+    <div class="section-wrap">
+      <div class="container">
+        <div class="columns">
+          <main class="main-column">
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      MySQL事务隔离级别和实现原理
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-03-20T13:11:23.000Z">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2021-03-20</span>
+    </time>
+    
+    
+    <span class="dot"></span>
+    <span>1.1k words</span>
+    
+  </div>
+  
+  </header>
+  <div id="section" class="post-content">
+    <h1 id="1、原理："><a href="#1、原理：" class="headerlink" title="1、原理："></a>1、原理：</h1><h2 id="MySQL事务"><a href="#MySQL事务" class="headerlink" title="MySQL事务"></a>MySQL事务</h2><ul>
+<li>MySQL 事务都是指在 <strong>InnoDB 引擎</strong>下，因为MyISAM引擎是不支持事务的。</li>
+<li>数据库是指：一组数据操作，事务内的操作要么全部成功，要么全部失败。只要有一步失败，就要回滚所有操作。</li>
+<li>事务具有四个特性：ACID——原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）、持久性（Durability）</li>
+</ul>
+<h2 id="四大问题：什么是脏读、可重复读、不可重复读、幻读？"><a href="#四大问题：什么是脏读、可重复读、不可重复读、幻读？" class="headerlink" title="四大问题：什么是脏读、可重复读、不可重复读、幻读？"></a>四大问题：什么是脏读、可重复读、不可重复读、幻读？</h2><ul>
+<li><strong>脏读</strong>：<strong>读</strong>到了<strong>其他事务修改了但尚未提交</strong>的数据。这个事务的操作有可能发生回滚，那么就可能发生错误。</li>
+<li><strong>可重复读：</strong>在一个事务内，从事务开始到事务结束，期间读到的同一批数据，始终是一致的。通常，针对数据更新（<strong>UPDATE</strong>）操作。</li>
+<li><strong>不可重复读：</strong>在一个事务内，不同时刻读到的数据可能是不一致的。通常，针对数据更新（<strong>UPDATE</strong>）操作。</li>
+<li><strong>幻读：</strong>幻读是针对<strong>插入（INSERT）</strong>操作来说的。假设事务A对某些⾏的内容作了更改，但是还未提交，此时<strong>事务B插⼊了与事务A更改前的记录相同的记录⾏</strong>，并且在事务A提交之前先提交了，⽽这时，在事务A中查询，会发现好像刚刚的更改对于某些数据未起作⽤，但其实是事务B刚插⼊进来的，让⽤户感觉很魔幻，感觉出现了幻觉，这就叫幻读。</li>
+</ul>
+<h2 id="四大隔离级别：读未提交、读提交、可重复读、串行化"><a href="#四大隔离级别：读未提交、读提交、可重复读、串行化" class="headerlink" title="四大隔离级别：读未提交、读提交、可重复读、串行化"></a>四大隔离级别：读未提交、读提交、可重复读、串行化</h2><p><img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20210320214854678.png" alt="image-20210320214854678" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20210320214854678.png" class="lozad post-image"></p>
+<ul>
+<li><p>MySQL的<strong>默认隔离级别</strong>是<strong>可重复读</strong>。</p>
+</li>
+<li><p>MySQL 中执⾏事务：事务的执⾏过程如下，以 begin 或者 start transaction 开始，然后执⾏⼀系列操作，最后要执⾏ commit 操作，事务才算结束。当然，如果进⾏回滚操作(rollback)，事务也会结束。</p>
+<p>需要注意的是，begin 命令并不代表事务的开始，事务开始于 begin 命令之后的第⼀条语句执⾏的时候。例如下⾯⽰例中，</p>
+<pre class="highlight"><span class="line">select * from xxx </span><br></pre>
+
+<p>才是事务的开始。</p>
+<pre class="highlight"><span class="line">begin; </span><br><span class="line">select * from xxx;  </span><br><span class="line">commit; -- 或者 rollback;</span><br></pre>
+
+
+
+<h3 id="1、读未提交"><a href="#1、读未提交" class="headerlink" title="1、读未提交"></a>1、读未提交</h3><p><strong>MySQL 事务隔离其实是依靠锁来实现的，加锁自然会带来性能的损失。⽽读未提交隔离级别是不加锁的，所以它的性能是最好的，没有加锁、解锁带来的性能开销。</strong>但有利就有弊，这基本上就相当于<strong>裸奔</strong>啊，所以它连脏读的问题都没办法解决。</p>
+<p><strong>读未提交，其实就是可以读到其他事务未提交的数据</strong>，但没有办法保证你读到的数据最终⼀定是提交后的数据，如果中间发⽣回滚，那就<strong>会出现脏数据问题</strong>，读未提交没办法解决脏数据问题。更别提可重复读和幻读了。</p>
+<h3 id="2、读提交"><a href="#2、读提交" class="headerlink" title="2、读提交"></a>2、读提交</h3><p>为了<strong>解决脏数据问题</strong>，就有了读提交隔离级别。读提交就是⼀个事务<strong>只能读到其他事务已经提交过的数据</strong>，也就是其他事务调⽤ commit 命令之后的数据。那脏数据问题迎刃而解了。</p>
+<p>但这也导致了⼀个问题，在同⼀事务中（事务B），事务的不同时刻，同样的查询条件，查询出来的记录内容是不⼀样的。事务A的提交影响了事务B的查询结果（事务A提交前数值为1，提交后数值为10），这就是不可重复读问题，也就是读提交隔离级别。</p>
+<h3 id="3、可重复读"><a href="#3、可重复读" class="headerlink" title="3、可重复读"></a>3、可重复读</h3><p>为了解决不可重复读问题，就有了<strong>可重复读</strong>隔离级别。同时启动两个事务A、B，事务A修改某数据并提交，但是事务B并不受修改的影响，读取的仍然是事务A修改前的值。</p>
+<p>但这仍然存在一个问题，对于<strong>新插⼊的⾏记录</strong>，就没这么幸运了，幻读就这么产⽣了。</p>
+<p><strong>其实，MySQL 的可重复读隔离级别其实解决了幻读问题</strong></p>
+<h3 id="4、串行化"><a href="#4、串行化" class="headerlink" title="4、串行化"></a>4、串行化</h3><p>为了解决幻读问题，就有了串行化的隔离级别。串⾏化是4种事务隔离级别中隔离效果最好的，解决了脏读、可重复读、幻读的问题，但是效果最差，它将事务的执⾏变为顺序执⾏，与其他三个隔离级别相⽐，它就相当于单线程，后⼀个事务的执⾏必须等待前⼀个事务结束。</p>
+<h1 id="2、实现"><a href="#2、实现" class="headerlink" title="2、实现"></a>2、实现</h1></li>
+</ul>
+
+  </div>
+  <div>
+  
+  <div class="post-note note-warning copyright" style="margin-top: 42px">
+    <p><span style="font-weight: bold;">作者：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://sacharn.github.io/about">燕树城</a></p>
+    <p><span style="font-weight: bold;">文章链接：</span><a target="_blank" rel="nofollow noopener noreferrer" href="https://sacharn.github.io/2021/03/20/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">https://sacharn.github.io/2021/03/20/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</a></p>
+    <p><span style="font-weight: bold;">版权声明：</span>本博客所有文章除特别声明外，均采用<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0 协议</a>。转载请注明出处！</p>
+  </div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  
+  <div class="nav-item-next">
+    <a href="/2021/03/20/流水的学生，铁打的修路/" class="nav-link">
+      <div>
+        <div class="nav-label">Next</div>
+        
+        <div class="nav-title">流水的学生，铁打的修路 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="toc-text">1、原理：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL%E4%BA%8B%E5%8A%A1"><span class="toc-text">MySQL事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E5%A4%A7%E9%97%AE%E9%A2%98%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E8%84%8F%E8%AF%BB%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E5%B9%BB%E8%AF%BB%EF%BC%9F"><span class="toc-text">四大问题：什么是脏读、可重复读、不可重复读、幻读？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E5%A4%A7%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9A%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4%E3%80%81%E8%AF%BB%E6%8F%90%E4%BA%A4%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="toc-text">四大隔离级别：读未提交、读提交、可重复读、串行化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4"><span class="toc-text">1、读未提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AF%BB%E6%8F%90%E4%BA%A4"><span class="toc-text">2、读提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="toc-text">3、可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="toc-text">4、串行化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">2、实现</span></a></li></ol>
+</div></main>
+          <aside class="left-column">
+            
+            <div class="card card-author">
+              
+<img src="/img/aze.png" class="author-img">
+
+<p class="author-name">燕树城</p>
+<p class="author-description">花有重开日，人无再少年</p>
+<div class="author-message">
+  <a class="author-posts-count" href="/archives">
+    <span>3</span>
+    <span>Posts</span>
+  </a>
+  <a class="author-categories-count" href="/categories">
+    <span>0</span>
+    <span>Categories</span>
+  </a>
+  <a class="author-tags-count" href="/tags">
+    <span>0</span>
+    <span>Tags</span>
+  </a>
+</div>
+
+            </div>
+            
+            <div class="sticky-tablet">
+  
+  
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="toc-text">1、原理：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL%E4%BA%8B%E5%8A%A1"><span class="toc-text">MySQL事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E5%A4%A7%E9%97%AE%E9%A2%98%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E8%84%8F%E8%AF%BB%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E5%B9%BB%E8%AF%BB%EF%BC%9F"><span class="toc-text">四大问题：什么是脏读、可重复读、不可重复读、幻读？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E5%A4%A7%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9A%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4%E3%80%81%E8%AF%BB%E6%8F%90%E4%BA%A4%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="toc-text">四大隔离级别：读未提交、读提交、可重复读、串行化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4"><span class="toc-text">1、读未提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AF%BB%E6%8F%90%E4%BA%A4"><span class="toc-text">2、读提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="toc-text">3、可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="toc-text">4、串行化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">2、实现</span></a></li></ol>
+    </div>
+  </article>
+  
+  
+  <article class="card card-content categories-widget">
+    <div class="categories-card">
+  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>Categories</div>
+  <div class="categories-list">
+    
+  </div>
+</div>
+  </article>
+  
+  <article class="card card-content tags-widget">
+    <div class="tags-card">
+  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>hot tags</div>
+  <div class="tags-list">
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+          <aside class="right-column">
+            <div class="sticky-widescreen">
+  
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>TOC</div>
+<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="toc-text">1、原理：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL%E4%BA%8B%E5%8A%A1"><span class="toc-text">MySQL事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E5%A4%A7%E9%97%AE%E9%A2%98%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E8%84%8F%E8%AF%BB%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E5%B9%BB%E8%AF%BB%EF%BC%9F"><span class="toc-text">四大问题：什么是脏读、可重复读、不可重复读、幻读？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E5%A4%A7%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9A%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4%E3%80%81%E8%AF%BB%E6%8F%90%E4%BA%A4%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E3%80%81%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="toc-text">四大隔离级别：读未提交、读提交、可重复读、串行化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4"><span class="toc-text">1、读未提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AF%BB%E6%8F%90%E4%BA%A4"><span class="toc-text">2、读提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="toc-text">3、可重复读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="toc-text">4、串行化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">2、实现</span></a></li></ol>
+  </article>
+  
+  
+  <article class="card card-content">
+    <div class="recent-posts-card">
+  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>Recent Posts</div>
+  <div class="recent-posts-list">
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-03-20</div>
+        <a href="/2021/03/20/MySQL事务隔离级别和实现原理/"><div class="recent-posts-item-content">MySQL事务隔离级别和实现原理</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-03-20</div>
+        <a href="/2021/03/20/流水的学生，铁打的修路/"><div class="recent-posts-item-content">流水的学生，铁打的修路</div></a>
+      </div>
+    
+      <div class="recent-posts-item">
+        <div class="recent-posts-item-title">2021-03-18</div>
+        <a href="/2021/03/18/hello-world/"><div class="recent-posts-item-content">Hello World</div></a>
+      </div>
+    
+  </div>
+</div>
+  </article>
+  
+  
+</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-dsc">
+        <span>Copyright ©
+          
+          2020 -
+          
+          2021
+        </span>
+        &nbsp;
+        <a href="/" class="footer-link">燕子坞 </a>
+      </div>
+    </div>
+
+    
+    <div class="footer-dsc">
+      
+      Powered by
+      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
+      
+      
+      <span>&nbsp;|&nbsp;</span>
+      
+      
+      Theme -
+      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
+        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
+      
+    </div>
+    
+    
+    
+    
+</footer>
+  <a role="button" id="scrollbutton" class="basebutton"  aria-label="回到顶部">
+  <i class="iconfont icon-arrowleft button-icon"></i>
+</a>
+<a role="button" id="menubutton" class="basebutton">
+  <i class="iconfont icon-menu button-icon"></i>
+</a>
+<a role="button" id="popbutton" class="basebutton" aria-label="控制中心">
+  <i class="iconfont icon-expand button-icon"></i>
+</a>
+<a role="button" id="darkbutton" class="basebutton darkwidget" aria-label="夜色模式">
+  <i class="iconfont icon-weather button-icon"></i>
+</a>
+<a role="button" id="searchbutton" class="basebutton searchwidget" aria-label="搜索">
+  <i class="iconfont icon-search button-icon"></i>
+</a>
+
+  
+  
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.setAttribute('aria-label', 'illustration');
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt;
+      wrapper.dataset.nolink = true;
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+      var divWrap = document.createElement('div');
+      divWrap.classList.add('gallery');
+      wrapper.before(divWrap);
+      divWrap.append(wrapper);
+    }
+    baguetteBox.run('.gallery');
+  }
+</script>
+<script>loadScript("/js/lib/lightbox/baguetteBox.min.js", addImgLayout)</script>
+  
+  
+  
+<script src="/js/main.js"></script>
+
+  
+  
+  <script>
+    var addLazyload = function () {
+      var observer = lozad('.lozad', {
+        load: function (el) {
+          el.srcset = el.getAttribute('data-src');
+        },
+        loaded: function (el) {
+          el.classList.add('loaded');
+        }
+      });
+      observer.observe();
+    }
+  </script>
+  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
+  
+  
+</body>
+
+</html>
