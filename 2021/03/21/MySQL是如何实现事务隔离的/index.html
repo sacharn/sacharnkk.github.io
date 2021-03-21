@@ -212,7 +212,7 @@
 <li>最后是<strong>读提交和可重复读</strong>。这两种隔离级别比较复杂，因为既要允许一定程度的并发，也要兼顾解决问题。</li>
 </ul>
 <h3 id="实现可重复读"><a href="#实现可重复读" class="headerlink" title="实现可重复读"></a>实现可重复读</h3><p>为了解决不可重复读，或者为了实现可重复读，MySQL 采⽤了 <strong>MVVC (多版本并发控制)</strong> 的⽅式。</p>
-<p>！<a href="%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB.png">实现可重复读</a></p>
+<p>！<a href="%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB">可重复读</a></p>
 <p>我们在数据库表中看到的⼀⾏记录可能实际上有多个版本，每个版本的记录除了有数据本⾝外，还要有⼀个<strong>表示版本的字段</strong>，记为 <strong>row trx_id</strong>，⽽这个字段就是使其产⽣的事务的 id，事务 ID 记为 <strong>transaction id</strong>，它在事务开始的时候向事务系统申请，<strong>按时间先后顺序递增</strong>。</p>
 <ul>
 <li><strong>快照</strong>是可重复读和不可重复读的关键，<strong>可重复读</strong>是在事务开始的时候⽣成⼀个当前<strong>事务全局性的快照</strong>，⽽<strong>读提交</strong>则是<strong>每次执⾏语句</strong>的时候都重新⽣成⼀次快照。</li>
@@ -238,7 +238,7 @@
 <li><p>前⾯刚说了并发写问题的解决⽅式就是⾏锁，⽽解决幻读⽤的也是锁，叫做<strong>间隙锁</strong>，MySQL把⾏锁和间隙锁合并在⼀起，解决了并发写和幻读的问题，这个锁叫做 Next-Key锁。</p>
 </li>
 <li><p>在行记录上加行锁，在行记录两边的区间加上间隙锁。</p>
-<p>！<a href="%E9%97%B4%E9%9A%99%E9%94%81.png">解决幻读问题的间隙锁</a></p>
+<p>！<a href="%E9%97%B4%E9%9A%99%E9%94%81">解决幻读问题的间隙锁</a></p>
 </li>
 </ul>
 <p>在事务A提交之前，事务B的插⼊操作只能等待，这就是间隙锁起得作⽤。当事务A执⾏</p>
