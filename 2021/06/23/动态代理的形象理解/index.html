@@ -8,16 +8,24 @@
   <meta name="theme-color" content="#fff" id="theme-color">
   <meta name="description" content="Hexo">
   <link rel="icon" href="/img/Kaze.png">
-  <title>分类</title>
+  <title>动态代理的形象理解</title>
   
   
-  <meta property="og:title" content="分类">
+  <meta property="og:title" content="动态代理的形象理解">
   
   
-  <meta property="og:url" content="https://sacharn.github.io/categories/index.html">
+  <meta property="og:url" content="https://sacharn.github.io/2021/06/23/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E5%BD%A2%E8%B1%A1%E7%90%86%E8%A7%A3/index.html">
   
   
   <meta property="og:img" content="/img/aze.png">
+  
+  
+  
+  <meta property="og:type" content="article">
+  <meta property="og:article:published_time" content="2021-06-23">
+  <meta property="og:article:modified_time" content="2021-08-23">
+  <meta property="og:article:author" content="燕树城">
+  
   
   
   
@@ -105,6 +113,10 @@
 
   
   
+<link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
+
+  
+  
   
   
 <meta name="generator" content="Hexo 5.4.0"></head>
@@ -174,14 +186,106 @@
       <div class="container">
         <div class="columns">
           <main class="main-column">
-<div class="card card-content">
-  <div class="categories-page-title" style="margin-bottom: 0.6rem;">分类</div>
-  <div>
-    共计&nbsp;16&nbsp;篇文章
+<article class="card card-content">
+  <header>
+    <h1 class="post-title">
+      动态代理的形象理解
+    </h1>
+  </header>
+  <div class="post-meta post-show-meta">
+    <time datetime="2021-06-23T12:24:42.000Z">
+      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
+      <span>2021-06-23</span>
+    </time>
+    
+    
+    <span class="dot"></span>
+    <span>656 字</span>
+    
   </div>
-</div>
-<div class="card card-content categories-page-card">
   
+  </header>
+  <div id="section" class="post-content">
+    <p>动态代理：</p>
+<p>​        借他人之手解决自己的需求</p>
+<p>模拟一个场景：</p>
+<p>​        明朝的一个皇帝想杀一个大臣，但是又没有太好的理由，顾及自己的脸面，不能脏了自己的手，落下历史骂名，所以就想锦衣卫来解决这个问题：杀了这个不听话的大臣。</p>
+<p>​        现在捋一下：幕后主使：皇帝，需求：杀大臣，代理人：锦衣卫。</p>
+<p>接下来要细化这个故事，</p>
+<p>​        ① 需求：杀大臣；</p>
+<p>​        ② 杀一个大臣不能说杀就杀，得有方案：也就是皇帝想怎么办这个事；</p>
+<p>​        ③ 接下来，要落到实处，比如就是嘉靖皇帝要杀严嵩；</p>
+<p>​        ④ 然后，要树立一个锦衣卫形象，并且他得知道三个事：自己为谁办事，解决什么事，怎么办。</p>
+<p>借助这个故事，总结动态代理的实现步骤：</p>
+<p>​        ① 首先，有一个杀大臣的接口 Kill</p>
+<p>​        ② 如果一个皇帝想杀大臣他要怎么干，于是写一个实现杀大臣接口的实现类</p>
+<p>​        ③ 新建一个嘉靖杀严嵩的实例对象</p>
+<p>​        ④ 用代理的方式树立一个锦衣卫形象，并告诉他，作为代理人，他的幕后主使是皇帝（目标类），需求是杀大臣（接口），怎么办（InvocationHandler        （targrt））</p>
+<pre class="highlight"><span class="line">Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(), &#x2F;&#x2F; 目标类的类加载</span><br><span class="line">                target.getClass().getInterfaces(),  &#x2F;&#x2F; 代理需要实现的接口，可指定多个</span><br><span class="line">                new DebugInvocationHandler(target)   &#x2F;&#x2F; 代理对象对应的自定义 InvocationHandler</span><br><span class="line">        );</span><br></pre>
+
+
+
+
+<pre><code>public Object invoke(Object proxy, Method method, Object[] args) throws InvocationTargetException, IllegalAccessException &#123;
+    //调用方法之前，我们可以添加自己的操作
+    System.out.println(&quot;before method &quot; + method.getName());
+    Object result = method.invoke(target, args);
+    //调用方法之后，我们同样可以添加自己的操作
+    System.out.println(&quot;after method &quot; + method.getName());
+    return result;
+&#125;
+</code></pre>
+<p><code>invoke()</code> 方法有下面三个参数：</p>
+<ol>
+<li><strong>proxy</strong> :动态生成的代理类</li>
+<li><strong>method</strong> : 与代理类对象调用的方法相对应</li>
+<li><strong>args</strong> : 当前 method 方法的参数</li>
+</ol>
+<p>也就是说：<strong>你通过<code>Proxy</code> 类的 <code>newProxyInstance()</code> 创建的代理对象在调用方法的时候，实际会调用到实现<code>InvocationHandler</code> 接口的类的 <code>invoke()</code>方法。</strong> 你可以在 <code>invoke()</code> 方法中自定义处理逻辑，比如在方法执行前后做什么事情。</p>
+<p>总结：JDK 动态代理类使用步骤</p>
+<ol>
+<li>定义一个接口及其实现类；</li>
+<li>自定义 <code>InvocationHandler</code> 并重写<code>invoke</code>方法，在 <code>invoke</code> 方法中我们会调用原生方法（被代理类的方法）并自定义一些处理逻辑；</li>
+<li>通过 <code>Proxy.newProxyInstance(ClassLoader loader,Class&lt;?&gt;[] interfaces,InvocationHandler h)</code> 方法创建代理对象；</li>
+</ol>
+
+  </div>
+  <div>
+  
+  </div>
+</article>
+<div class="nav">
+  
+  <div class="nav-item-prev">
+    <a href="/2021/08/20/开发者边车解谜小游戏/" class="nav-link">
+      <i class="iconfont icon-left nav-prev-icon"></i>
+      <div>
+        <div class="nav-label">上一篇</div>
+        
+        <div class="nav-title">开发者边车解谜小游戏 </div>
+        
+      </div>
+    </a>
+  </div>
+  
+  
+  <div class="nav-item-next">
+    <a href="/2021/05/21/畅想夏日/" class="nav-link">
+      <div>
+        <div class="nav-label">下一篇</div>
+        
+        <div class="nav-title">畅想夏日 </div>
+        
+      </div>
+      <i class="iconfont icon-right nav-next-icon"></i>
+    </a>
+  </div>
+  
+</div>
+
+<div class="card card-content toc-card" id="mobiletoc">
+  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>目录</div>
+
 </div></main>
           <aside class="left-column">
             
@@ -211,6 +315,13 @@
             <div class="sticky-tablet">
   
   
+  <article class="display-when-two-columns spacer">
+    <div class="card card-content toc-card">
+      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>目录</div>
+
+    </div>
+  </article>
+  
   
   <article class="card card-content categories-widget">
     <div class="categories-card">
@@ -231,89 +342,6 @@
   </article>
   
   
-  <article class="card card-content widescreen-archive archive-widget">
-    <div class="archive-card">
-  <div class="archive-card-header"><i class="iconfont icon-wodebaobiao" style="padding-right: 2px;"></i>归档</div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a href="/archives/2021" class="archive-card-list-item">
-          2021
-          <span class="archive-card-list-item-badge">16</span>
-      </a>
-    
-  </div>
-</div>
-  </article>
-  
   <nav class="header-music">
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="//music.163.com/outchain/player?type=2&id=447926067&auto=1&height=66"></iframe></nav>
 
@@ -322,6 +350,11 @@
           <aside class="right-column">
             <div class="sticky-widescreen">
   
+  
+  <article class="card card-content toc-card">
+    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>目录</div>
+
+  </article>
   
   
   <article class="card card-content">
@@ -353,89 +386,6 @@
 </div>
   </article>
   
-  
-  <article class="card card-content">
-    <div class="archive-card">
-  <div class="archive-card-header"><i class="iconfont icon-wodebaobiao" style="padding-right: 2px;"></i>归档</div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a href="/archives/2021" class="archive-card-list-item">
-          2021
-          <span class="archive-card-list-item-badge">16</span>
-      </a>
-    
-  </div>
-</div>
-  </article>
   
 </div>
           </aside>
@@ -497,6 +447,29 @@
 
   
   
+  
+  <script>
+  var addImgLayout = function () {
+    var img = document.querySelectorAll('.post-content img');
+    var i;
+    for (i = 0; i < img.length; i++) {
+      var wrapper = document.createElement('a');
+      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
+      wrapper.setAttribute('aria-label', 'illustration');
+      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
+      if (img[i].alt) wrapper.dataset.caption = img[i].alt;
+      wrapper.dataset.nolink = true;
+      img[i].before(wrapper);
+      wrapper.append(img[i]);
+      var divWrap = document.createElement('div');
+      divWrap.classList.add('gallery');
+      wrapper.before(divWrap);
+      divWrap.append(wrapper);
+    }
+    baguetteBox.run('.gallery');
+  }
+</script>
+<script>loadScript("/js/lib/lightbox/baguetteBox.min.js", addImgLayout)</script>
   
   
   
