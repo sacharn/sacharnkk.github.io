@@ -1,832 +1,719 @@
+
+
 <!DOCTYPE html>
-<html  lang="zh-CN" >
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="theme-color" content="#fff" id="theme-color">
-  <meta name="description" content="Hexo">
-  <link rel="icon" href="/img/Kaze.png">
-  <title>燕子坞</title>
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://sacharn.github.io/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
   
   
-  <meta property="og:title" content="燕子坞">
   
+  <title>Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-  <meta property="og:url" content="https://sacharn.github.io/index.html">
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
-  
-  <meta property="og:img" content="/img/aze.png">
-  
-  
-  
-  
-  <script>
-    // control reverse button
-    var reverseDarkList = {
-      dark: 'light',
-      light: 'dark'
-    };
-    var themeColor = {
-      dark: '#1c1c1e',
-      light: '#fff'
-    }
-    // get the data of css prefers-color-scheme
-    var getCssMediaQuery = function() {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    };
-    // reverse current darkmode setting function
-    var reverseDarkModeSetting = function() {
-      var setting = localStorage.getItem('user-color-scheme');
-      if(reverseDarkList[setting]) {
-        setting = reverseDarkList[setting];
-      } else if(setting === null) {
-        setting = reverseDarkList[getCssMediaQuery()];
-      } else {
-        return;
-      }
-      localStorage.setItem('user-color-scheme', setting);
-      return setting;
-    };
-    // apply current darkmode setting
-    var setDarkmode = function(mode) {
-      var setting = mode || localStorage.getItem('user-color-scheme');
-      if(setting === getCssMediaQuery()) {
-        document.documentElement.removeAttribute('data-user-color-scheme');
-        localStorage.removeItem('user-color-scheme');
-        document.getElementById('theme-color').content = themeColor[setting];
-      } else if(reverseDarkList[setting]) {
-        document.documentElement.setAttribute('data-user-color-scheme', setting);
-        document.getElementById('theme-color').content = themeColor[setting];
-      } else {
-        document.documentElement.removeAttribute('data-user-color-scheme');
-        localStorage.removeItem('user-color-scheme');
-        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
-      }
-    };
-    setDarkmode();
-  </script>
-  <script>
-    function loadScript(url, cb) {
-      var script = document.createElement('script');
-      script.src = url;
-      if (cb) script.onload = cb;
-      script.async = true;
-      document.body.appendChild(script);
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"sacharn.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
-  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
-  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
-  
-  <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
-  <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
-  
-  
-  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
-  
-  
-  
-  
-  
-  
-  
-  
-<link rel="stylesheet" href="/css/main.css">
 
-  
-  
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
 
-  
-  
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
-
-  
-  
-  
   
 <meta name="generator" content="Hexo 5.4.0"></head>
 
 
 <body>
-  <div class="wrapper">
+  
+
+  <header>
     
-    <nav class="navbar">
-  <div class="navbar-logo">
-    <span class="navbar-logo-main">
-      
-      <img class="navbar-logo-img" src="/img/Kaze.png" alt="logo">
-      
-      <span class="navbar-logo-dsc">燕子坞</span>
-    </span>
-  </div>
-  <div class="navbar-menu">
-    
-    <a href="/" class="navbar-menu-item">
-    
-    首页
-    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
     </a>
-    
-    <a href="/archives" class="navbar-menu-item">
-    
-    归档
-    
-    </a>
-    
-    <a href="/tags" class="navbar-menu-item">
-    
-    标签
-    
-    </a>
-    
-    <a href="/categories" class="navbar-menu-item">
-    
-    分类
-    
-    </a>
-    
-    <a href="/about" class="navbar-menu-item">
-    
-    关于
-    
-    </a>
-    
-    <a href="/links" class="navbar-menu-item">
-    
-    友链
-    
-    </a>
-    
-    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
-    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
 </nav>
-    
-    <div id="local-search" style="display: none;">
-      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
-      <div id="search-content"></div>
-    </div>
-    
-    <div class="section-wrap">
-      <div class="container">
-        <div class="columns">
-          <main class="main-column">
-<div class="card">
+
   
-  <article class="card card-content">
-    <a href="/2021/08/20/开发者边车解谜小游戏/">
-      <h1 class="post-title">
-        开发者边车解谜小游戏
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      加密人说他把谜面留在源码的//TODO中。
-打开源码，找到他留下的谜面如下：
-\u0061\u0048\u0052\u00...
-      
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-08-20T02:59:07.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-08-20</span>
-        </time>
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="An elegant Material-Design theme for Hexo"></span>
+          
+        </div>
+
         
       </div>
-      <a href="/2021/08/20/%E5%BC%80%E5%8F%91%E8%80%85%E8%BE%B9%E8%BD%A6%E8%A7%A3%E8%B0%9C%E5%B0%8F%E6%B8%B8%E6%88%8F/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/06/23/动态代理的形象理解/">
-      <h1 class="post-title">
-        动态代理的形象理解
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      动态代理：
-​        借他人之手解决自己的需求
-模拟一个场景：
-​        明朝的一个皇帝想杀一个大臣，但是又没有太好的理由，顾及自己的脸面，不能脏了自己的手，落下历史骂名...
-      
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-06-23T12:24:42.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-06-23</span>
-        </time>
-        
-      </div>
-      <a href="/2021/06/23/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E5%BD%A2%E8%B1%A1%E7%90%86%E8%A7%A3/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/05/21/畅想夏日/">
-      <h1 class="post-title">
-        畅想夏日
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      盛夏，太阳把灼热的强光照射在大地上，蝉声就像白噪声一样持续不断，心情烦躁时听了愈加烦躁，但是午休时又能伴着规律的蝉声入眠，能睡得更香更沉。猫狗和人都害怕暴晒，所以都躲到阴凉中，困倦。只有绿色的植物显得更加精神和具有生气，明澈的河...
-      
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-05-21T05:08:20.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-05-21</span>
-        </time>
-        
-      </div>
-      <a href="/2021/05/21/%E7%95%85%E6%83%B3%E5%A4%8F%E6%97%A5/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/04/27/登录接口安全注意事项/">
-      <h1 class="post-title">
-        登录接口安全注意事项
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      登录接口安全
-      
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-04-27T02:31:33.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-04-27</span>
-        </time>
-        
-      </div>
-      <a href="/2021/04/27/%E7%99%BB%E5%BD%95%E6%8E%A5%E5%8F%A3%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/04/26/科研进展/">
-      <h1 class="post-title">
-        科研进展
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      FDA+IRS+BeamForming实现保密通信
 
       
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-04-26T06:54:08.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-04-26</span>
-        </time>
-        
-      </div>
-      <a href="/2021/04/26/%E7%A7%91%E7%A0%94%E8%BF%9B%E5%B1%95/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/04/22/HashMap底层原理/">
-      <h1 class="post-title">
-        HashMap底层原理
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      HashMaphashMap的默认容量是16，默认扩容因子是0.75...
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
       
     </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-04-22T05:56:08.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-04-22</span>
-        </time>
-        
-      </div>
-      <a href="/2021/04/22/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/04/22/Java基础知识阶段性整理/">
-      <h1 class="post-title">
-        Java基础知识阶段性整理
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      01 谈谈对面向对象思想的理解
-      
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-04-22T05:44:33.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-04-22</span>
-        </time>
-        
-      </div>
-      <a href="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/04/14/生鲜项目总结/">
-      <h1 class="post-title">
-        生鲜项目总结
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      
-      
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-04-14T05:59:48.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-04-14</span>
-        </time>
-        
-      </div>
-      <a href="/2021/04/14/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/03/23/面经问题整理/">
-      <h1 class="post-title">
-        面经问题整理
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      1、Get和Post请求的区别
-      
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-03-23T01:27:39.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-03-23</span>
-        </time>
-        
-      </div>
-      <a href="/2021/03/23/%E9%9D%A2%E7%BB%8F%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-<div class="card">
-  
-  <article class="card card-content">
-    <a href="/2021/03/22/生鲜项目中的实现细节/">
-      <h1 class="post-title">
-        生鲜项目中的实现细节
-      </h1>
-    </a>
-    <div class="card-excerpt">
-      
-      1、统一异常
-我们需要对这些异常进行统一的捕获并处理。Sprin...
-      
-    </div>
-    <div class="card-post-footer">
-      <div class="post-meta">
-        <time datetime="2021-03-22T07:35:14.000Z">
-          <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-          <span>2021-03-22</span>
-        </time>
-        
-      </div>
-      <a href="/2021/03/22/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82/">继续阅读 </a>
-    </div>
-  </article>
-</div>
-
-
-<div class="nav">
-  
-  
-  <div class="nav-item-next">
-    <a href="/page/2/" class="nav-link">
-      <div>
-        <div class="nav-label">下一页</div>
-        
-      </div>
-      <i class="iconfont icon-right nav-next-icon"></i>
-    </a>
   </div>
-  
 </div>
-</main>
-          <aside class="left-column">
+
+</div>
+
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-x-md">
+        <div id="board"
+          style="margin-top: 0">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/09/12/2022%E5%B9%B4%E7%A7%8B%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/" target="_self">
+          
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/12/2022%E5%B9%B4%E7%A7%8B%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/" target="_self">
+        <div>
+          Java基础封装、继承、多态重写与重载接口与抽象类的区别计算机网络HTTPS原理以及攻击对称加密和非对称加密Socket通信DNS解析NAT地址转换SSO、权限认证、JWT服务端怎么获取客户端的浏览器类型1String header = request.getHeader(&quot;User-Agent&quot;);  MySQL数据库SQL注入———————————————— SQL注入是将
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-09-12 11:01" pubdate>
+              2022-09-12
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/20/%E5%BC%80%E5%8F%91%E8%80%85%E8%BE%B9%E8%BD%A6%E8%A7%A3%E8%B0%9C%E5%B0%8F%E6%B8%B8%E6%88%8F/" target="_self">
+          开发者边车解谜小游戏
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/08/20/%E5%BC%80%E5%8F%91%E8%80%85%E8%BE%B9%E8%BD%A6%E8%A7%A3%E8%B0%9C%E5%B0%8F%E6%B8%B8%E6%88%8F/" target="_self">
+        <div>
+          加密人说他把谜面留在源码的//TODO中。 打开源码，找到他留下的谜面如下： 1\u0061\u0048\u0052\u0030\u0063\u0044\u006f\u0076\u004c\u0032\u0052\u006c\u0064\u0069\u0031\u007a\u0061\u0057\u0052\u006c\u0059\u0032\u0046\u0079\u004c\u006d\u00
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-20 10:59" pubdate>
+              2021-08-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
             
-            <div class="card card-author">
-              
-<img src="/img/aze.png" class="author-img">
+              <a href="/tags/%E8%B6%A3%E4%BA%8B/">#趣事</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
 
-<p class="author-name">燕树城</p>
-<p class="author-description">花有重开日，人无再少年</p>
-<div class="author-message">
-  <a class="author-posts-count" href="/archives">
-    <span>16</span>
-    <span>文章</span>
-  </a>
-  <a class="author-categories-count" href="/categories">
-    <span>0</span>
-    <span>分类</span>
-  </a>
-  <a class="author-tags-count" href="/tags">
-    <span>9</span>
-    <span>标签</span>
-  </a>
-</div>
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/06/23/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E5%BD%A2%E8%B1%A1%E7%90%86%E8%A7%A3/" target="_self">
+          动态代理的形象理解
+        </a>
+      </h1>
 
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/06/23/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E5%BD%A2%E8%B1%A1%E7%90%86%E8%A7%A3/" target="_self">
+        <div>
+          动态代理： ​        借他人之手解决自己的需求 模拟一个场景： ​        明朝的一个皇帝想杀一个大臣，但是又没有太好的理由，顾及自己的脸面，不能脏了自己的手，落下历史骂名，所以就想锦衣卫来解决这个问题：杀了这个不听话的大臣。 ​        现在捋一下：幕后主使：皇帝，需求：杀大臣，代理人：锦衣卫。 接下来要细化这个故事， ​        ① 需求：杀大臣； ​
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-06-23 20:24" pubdate>
+              2021-06-23
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/05/21/%E7%95%85%E6%83%B3%E5%A4%8F%E6%97%A5/" target="_self">
+          畅想夏日
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/05/21/%E7%95%85%E6%83%B3%E5%A4%8F%E6%97%A5/" target="_self">
+        <div>
+          盛夏，太阳把灼热的强光照射在大地上，蝉声就像白噪声一样持续不断，心情烦躁时听了愈加烦躁，但是午休时又能伴着规律的蝉声入眠，能睡得更香更沉。猫狗和人都害怕暴晒，所以都躲到阴凉中，困倦。只有绿色的植物显得更加精神和具有生气，明澈的河水也比往常更显得透亮与清凉。夏天的果蔬是最受人喜爱的，我们会在院子里自己种上一些果蔬，按照时令季节种植与采摘。我们用剪刀剪下一颗在阳光下把红到熟透的番茄，赞叹一下它的丰腴，
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-05-21 13:08" pubdate>
+              2021-05-21
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/27/%E7%99%BB%E5%BD%95%E6%8E%A5%E5%8F%A3%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" target="_self">
+          登录接口安全注意事项
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/27/%E7%99%BB%E5%BD%95%E6%8E%A5%E5%8F%A3%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" target="_self">
+        <div>
+          登录接口安全问题一 暴力破解只要网站是暴露在公网的，那么很大概率上会被人盯上，尝试爆破这种简单且有效的方式：通过各种方式获得了网站的用户名之后，通过编写程序来遍历所有可能的密码，直至找到正确的密码为止 解决方案 ① 验证码校验 我可以在它密码错误达到一定次数时，增加验证码校验！比如我们设置，当用户密码错误达到3次之后，则需要用户输入图片验证码才可以继续登录操作 缺陷：这样确实可以过滤掉一些非法的攻
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-27 10:31" pubdate>
+              2021-04-27
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E9%A1%B9%E7%9B%AE%E5%8A%9F%E8%83%BD/">#项目功能</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/26/%E7%A7%91%E7%A0%94%E8%BF%9B%E5%B1%95/" target="_self">
+          科研进展
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/26/%E7%A7%91%E7%A0%94%E8%BF%9B%E5%B1%95/" target="_self">
+        <div>
+          FDA+IRS+BeamForming实现保密通信
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-26 14:54" pubdate>
+              2021-04-26
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/22/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" target="_self">
+          HashMap底层原理
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/22/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" target="_self">
+        <div>
+          HashMaphashMap的默认容量是16，默认扩容因子是0.75，这是综合了空间和时间两个方面考虑的。扩容因子太小，hashMap就会经常扩容，扩容因子太大，就会导致hash冲突现象严重。 hashMap的底层是数组加链表(JDK1.8后改为数组加链表/红黑树，一个hash桶的元素大于8并且hashMap的容量大于等于64时，使用红黑树结构，如果桶的元素变为6，就重新变为链表，为什么是6，是为
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-22 13:56" pubdate>
+              2021-04-22
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E9%9B%86%E5%90%88/">#集合</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/" target="_self">
+          Java基础知识阶段性整理
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/" target="_self">
+        <div>
+          01 谈谈对面向对象思想的理解首先，谈谈“面向过程”vs“面向对象” 我觉得这两者是思考角度的差异，面向过程更多是以“执行者”的角度来思考问题，而面向对象更多是以“组织者”的角度来思考问题，举个例子，比如我要产生一个0-10之间的随机数，如果以“面向过程”的思维，那我更多是关注如何去设计一个算法，然后保证比较均衡产生0-10的随机数，而面向对象的思维会更多关注，我找谁来帮我们做这件事，比如Rand
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-22 13:44" pubdate>
+              2021-04-22
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Java%E5%9F%BA%E7%A1%80/">#Java基础</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/14/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" target="_self">
+          生鲜项目总结
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/04/14/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" target="_self">
+        <div>
+          
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-14 13:59" pubdate>
+              2021-04-14
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">#项目总结</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/03/23/%E9%9D%A2%E7%BB%8F%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" target="_self">
+          面经问题整理
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2021/03/23/%E9%9D%A2%E7%BB%8F%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/" target="_self">
+        <div>
+          1、Get和Post请求的区别 哪一些情况下，浏览器会发送get请求 ​        a. 直接在浏览器地址栏输入某个地址 ​        b. 点击链接 ​        c. 表单默认的提交方式   哪一些情况下，浏览器会发送post请求？     ​        a. 设置表单method = “post”   get请求的特点    ​        a. 请求参数会添加到请求资源路
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-03-23 09:27" pubdate>
+              2021-03-23
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E9%9D%A2%E7%BB%8F/">#面经</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+
+
+
+              </div>
             </div>
-            
-            <div class="sticky-tablet">
-  
-  
-  
-  <article class="card card-content categories-widget">
-    <div class="categories-card">
-  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>分类</div>
-  <div class="categories-list">
-    
-  </div>
-</div>
-  </article>
-  
-  <article class="card card-content tags-widget">
-    <div class="tags-card">
-  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>热门标签</div>
-  <div class="tags-list">
-    
-    <a href="/tags/项目功能/" title="项目功能"><div class="tags-list-item">项目功能</div></a>
-    
-    <a href="/tags/MySQL数据库/" title="MySQL数据库"><div class="tags-list-item">MySQL数据库</div></a>
-    
-    <a href="/tags/面经/" title="面经"><div class="tags-list-item">面经</div></a>
-    
-    <a href="/tags/歌词/" title="歌词"><div class="tags-list-item">歌词</div></a>
-    
-    <a href="/tags/项目总结/" title="项目总结"><div class="tags-list-item">项目总结</div></a>
-    
-    <a href="/tags/Java基础/" title="Java基础"><div class="tags-list-item">Java基础</div></a>
-    
-    <a href="/tags/趣事/" title="趣事"><div class="tags-list-item">趣事</div></a>
-    
-    <a href="/tags/JVM/" title="JVM"><div class="tags-list-item">JVM</div></a>
-    
-    <a href="/tags/集合/" title="集合"><div class="tags-list-item">集合</div></a>
-    
-  </div>
-</div>
-  </article>
-  
-  
-  <article class="card card-content widescreen-archive archive-widget">
-    <div class="archive-card">
-  <div class="archive-card-header"><i class="iconfont icon-wodebaobiao" style="padding-right: 2px;"></i>归档</div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a href="/archives/2021" class="archive-card-list-item">
-          2021
-          <span class="archive-card-list-item-badge">16</span>
-      </a>
-    
-  </div>
-</div>
-  </article>
-  
-  <nav class="header-music">
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="//music.163.com/outchain/player?type=2&id=447926067&auto=1&height=66"></iframe></nav>
-
-</div>
-          </aside>
-          <aside class="right-column">
-            <div class="sticky-widescreen">
-  
-  
-  
-  <article class="card card-content">
-    <div class="recent-posts-card">
-  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>最近文章</div>
-  <div class="recent-posts-list">
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-08-20</div>
-        <a href="/2021/08/20/开发者边车解谜小游戏/"><div class="recent-posts-item-content">开发者边车解谜小游戏</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-06-23</div>
-        <a href="/2021/06/23/动态代理的形象理解/"><div class="recent-posts-item-content">动态代理的形象理解</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-05-21</div>
-        <a href="/2021/05/21/畅想夏日/"><div class="recent-posts-item-content">畅想夏日</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-04-27</div>
-        <a href="/2021/04/27/登录接口安全注意事项/"><div class="recent-posts-item-content">登录接口安全注意事项</div></a>
-      </div>
-    
-  </div>
-</div>
-  </article>
-  
-  
-  <article class="card card-content">
-    <div class="archive-card">
-  <div class="archive-card-header"><i class="iconfont icon-wodebaobiao" style="padding-right: 2px;"></i>归档</div>
-  <div class="archive-card-list">
-    
-    
-    
-      
-        
-        
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-      
-        
-      
-    
-    
-      <a href="/archives/2021" class="archive-card-list-item">
-          2021
-          <span class="archive-card-list-item-badge">16</span>
-      </a>
-    
-  </div>
-</div>
-  </article>
-  
-</div>
-          </aside>
+          </div>
         </div>
       </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
   
-  <footer class="footer">
-  <div class="footer-container">
-    <div>
-      <div class="footer-dsc">
-        <span>Copyright ©
-          
-          2020 -
-          
-          2021
-        </span>
-        &nbsp;
-        <a href="/" class="footer-link">燕子坞 </a>
-      </div>
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
     </div>
+  
+  
+  
+  
+</div>
 
-    
-    <div class="footer-dsc">
-      
-      Powered by
-      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
-      
-      
-      <span>&nbsp;|&nbsp;</span>
-      
-      
-      Theme -
-      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
-        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
-      
-    </div>
-    
-    
-    
-    
-      <div class="footer-dsc">
-        
-        本站总访问量<span id="busuanzi_value_site_pv"></span>次
-        
-        
-        <span>&nbsp;|&nbsp;</span>
-        
-        
-        本站总访客数<span id="busuanzi_value_site_uv"></span>次
-        
-      </div>
-      
-    
-</footer>
-  <a role="button" id="scrollbutton" class="basebutton"  aria-label="回到顶部">
-  <i class="iconfont icon-arrowleft button-icon"></i>
-</a>
-<a role="button" id="menubutton" class="basebutton">
-  <i class="iconfont icon-menu button-icon"></i>
-</a>
-<a role="button" id="popbutton" class="basebutton" aria-label="控制中心">
-  <i class="iconfont icon-expand button-icon"></i>
-</a>
-<a role="button" id="darkbutton" class="basebutton darkwidget" aria-label="夜色模式">
-  <i class="iconfont icon-weather button-icon"></i>
-</a>
-<a role="button" id="searchbutton" class="basebutton searchwidget" aria-label="搜索">
-  <i class="iconfont icon-search button-icon"></i>
-</a>
+  </footer>
 
+  <!-- Scripts -->
   
-  
-  
-  
-  
-<script src="/js/main.js"></script>
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
-  
-  <script>loadScript("/js/lib/busuanzi.min.js")</script>
-  
-  
   <script>
-    var addLazyload = function () {
-      var observer = lozad('.lozad', {
-        load: function (el) {
-          el.srcset = el.getAttribute('data-src');
-        },
-        loaded: function (el) {
-          el.classList.add('loaded');
-        }
-      });
-      observer.observe();
-    }
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
   </script>
-  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
-  
-  
-</body>
 
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
 </html>

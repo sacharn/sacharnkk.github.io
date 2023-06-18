@@ -1,224 +1,283 @@
+
+
 <!DOCTYPE html>
-<html  lang="zh-CN" >
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="theme-color" content="#fff" id="theme-color">
-  <meta name="description" content="Hexo">
-  <link rel="icon" href="/img/Kaze.png">
-  <title>Java基础知识阶段性整理</title>
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
   
-  <meta property="og:title" content="Java基础知识阶段性整理">
-  
-  
-  <meta property="og:url" content="https://sacharn.github.io/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/index.html">
-  
-  
-  <meta property="og:img" content="/img/aze.png">
-  
-  
-  
-  <meta property="og:type" content="article">
-  <meta property="og:article:published_time" content="2021-04-22">
-  <meta property="og:article:modified_time" content="2021-12-06">
-  <meta property="og:article:author" content="燕树城">
-  
-  
-  <meta property="og:article:tag" content="Java基础">
-  
+    <meta name="description" content="01 谈谈对面向对象思想的理解首先，谈谈“面向过程”vs“面向对象” 我觉得这两者是思考角度的差异，面向过程更多是以“执行者”的角度来思考问题，而面向对象更多是以“组织者”的角度来思考问题，举个例子，比如我要产生一个0-10之间的随机数，如果以“面向过程”的思维，那我更多是关注如何去设计一个算法，然后保证比较均衡产生0-10的随机数，而面向对象的思维会更多关注，我找谁来帮我们做这件事，比如Rand">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础知识阶段性整理">
+<meta property="og:url" content="https://sacharn.github.io/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="01 谈谈对面向对象思想的理解首先，谈谈“面向过程”vs“面向对象” 我觉得这两者是思考角度的差异，面向过程更多是以“执行者”的角度来思考问题，而面向对象更多是以“组织者”的角度来思考问题，举个例子，比如我要产生一个0-10之间的随机数，如果以“面向过程”的思维，那我更多是关注如何去设计一个算法，然后保证比较均衡产生0-10的随机数，而面向对象的思维会更多关注，我找谁来帮我们做这件事，比如Rand">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sacharn.github.io/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-199da3b71771a2ac8a6abca871d2bca2_b.jpg">
+<meta property="og:image" content="https://sacharn.github.io/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-a3d8312a2f5e4d69c034c64fcb5e91ee_b.jpg">
+<meta property="article:published_time" content="2021-04-22T05:44:33.000Z">
+<meta property="article:modified_time" content="2021-12-06T06:33:45.075Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java基础">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sacharn.github.io/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-199da3b71771a2ac8a6abca871d2bca2_b.jpg">
   
   
   
-  <script>
-    // control reverse button
-    var reverseDarkList = {
-      dark: 'light',
-      light: 'dark'
-    };
-    var themeColor = {
-      dark: '#1c1c1e',
-      light: '#fff'
-    }
-    // get the data of css prefers-color-scheme
-    var getCssMediaQuery = function() {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    };
-    // reverse current darkmode setting function
-    var reverseDarkModeSetting = function() {
-      var setting = localStorage.getItem('user-color-scheme');
-      if(reverseDarkList[setting]) {
-        setting = reverseDarkList[setting];
-      } else if(setting === null) {
-        setting = reverseDarkList[getCssMediaQuery()];
-      } else {
-        return;
-      }
-      localStorage.setItem('user-color-scheme', setting);
-      return setting;
-    };
-    // apply current darkmode setting
-    var setDarkmode = function(mode) {
-      var setting = mode || localStorage.getItem('user-color-scheme');
-      if(setting === getCssMediaQuery()) {
-        document.documentElement.removeAttribute('data-user-color-scheme');
-        localStorage.removeItem('user-color-scheme');
-        document.getElementById('theme-color').content = themeColor[setting];
-      } else if(reverseDarkList[setting]) {
-        document.documentElement.setAttribute('data-user-color-scheme', setting);
-        document.getElementById('theme-color').content = themeColor[setting];
-      } else {
-        document.documentElement.removeAttribute('data-user-color-scheme');
-        localStorage.removeItem('user-color-scheme');
-        document.getElementById('theme-color').content = themeColor[getCssMediaQuery()];
-      }
-    };
-    setDarkmode();
-  </script>
-  <script>
-    function loadScript(url, cb) {
-      var script = document.createElement('script');
-      script.src = url;
-      if (cb) script.onload = cb;
-      script.async = true;
-      document.body.appendChild(script);
+  <title>Java基础知识阶段性整理 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"sacharn.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
-  <link rel="preload" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css" as="style" >
-  <link rel="preload" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css" as="style" >
-  
-  <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.js" as="script">
-  <link rel="preload" href="/js/lib/lightbox/baguetteBox.min.css" as="style" >
-  
-  
-  <link rel="preload" href="/js/lib/lozad.min.js" as="script">
-  
-  
-  
-  
-  
-  
-  
-  
-<link rel="stylesheet" href="/css/main.css">
 
-  
-  
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1946621_i1kgafibvw.css">
 
-  
-  
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1952792_89b4ac4k4up.css">
-
-  
-  
-<link rel="stylesheet" href="/js/lib/lightbox/baguetteBox.min.css">
-
-  
-  
-  
   
 <meta name="generator" content="Hexo 5.4.0"></head>
 
 
 <body>
-  <div class="wrapper">
+  
+
+  <header>
     
-    <nav class="navbar">
-  <div class="navbar-logo">
-    <span class="navbar-logo-main">
-      
-      <img class="navbar-logo-img" src="/img/Kaze.png" alt="logo">
-      
-      <span class="navbar-logo-dsc">燕子坞</span>
-    </span>
-  </div>
-  <div class="navbar-menu">
-    
-    <a href="/" class="navbar-menu-item">
-    
-    首页
-    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
     </a>
-    
-    <a href="/archives" class="navbar-menu-item">
-    
-    归档
-    
-    </a>
-    
-    <a href="/tags" class="navbar-menu-item">
-    
-    标签
-    
-    </a>
-    
-    <a href="/categories" class="navbar-menu-item">
-    
-    分类
-    
-    </a>
-    
-    <a href="/about" class="navbar-menu-item">
-    
-    关于
-    
-    </a>
-    
-    <a href="/links" class="navbar-menu-item">
-    
-    友链
-    
-    </a>
-    
-    <a class="navbar-menu-item darknavbar" id="dark"><i class="iconfont icon-weather"></i></a>
-    <a class="navbar-menu-item searchnavbar" id="search"><i class="iconfont icon-search" style="font-size: 1.2rem; font-weight: 400;"></i></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
 </nav>
-    
-    <div id="local-search" style="display: none;">
-      <input class="navbar-menu-item" id="search-input" placeholder="请输入搜索内容...">
-      <div id="search-content"></div>
-    </div>
-    
-    <div class="section-wrap">
-      <div class="container">
-        <div class="columns">
-          <main class="main-column">
-<article class="card card-content">
-  <header>
-    <h1 class="post-title">
-      Java基础知识阶段性整理
-    </h1>
-  </header>
-  <div class="post-meta post-show-meta">
-    <time datetime="2021-04-22T05:44:33.000Z">
-      <i class="iconfont icon-calendar" style="margin-right: 2px;"></i>
-      <span>2021-04-22</span>
-    </time>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java基础知识阶段性整理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
     
     
-    <span class="dot"></span>
-    <span>3.7k 字</span>
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-04-22 13:44" pubdate>
+          2021年4月22日 下午
+        </time>
+      </span>
     
   </div>
-  
-  <div class="post-meta post-show-meta" style="margin-top: -10px;">
-    <div style="display: flex; align-items: center;">
-      <i class="iconfont icon-biaoqian" style="margin-right: 2px; font-size: 1.15rem;"></i>
-      
-      
-        <a href="/tags/Java基础/" class="post-meta-link">Java基础</a>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          62 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
       
     </div>
   </div>
-  
+</div>
+
+</div>
+
   </header>
-  <div id="section" class="post-content">
-    <h4 id="01-谈谈对面向对象思想的理解"><a href="#01-谈谈对面向对象思想的理解" class="headerlink" title="01 谈谈对面向对象思想的理解"></a>01 谈谈对面向对象思想的理解</h4><p>首先，谈谈“面向过程”vs“面向对象”</p>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java基础知识阶段性整理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h4 id="01-谈谈对面向对象思想的理解"><a href="#01-谈谈对面向对象思想的理解" class="headerlink" title="01 谈谈对面向对象思想的理解"></a>01 谈谈对面向对象思想的理解</h4><p>首先，谈谈“面向过程”vs“面向对象”</p>
 <p>我觉得这两者是思考角度的差异，面向过程更多是以“执行者”的角度来思考问题，而面向对象更多是以“组织者”的角度来思考问题，举个例子，比如我要产生一个0-10之间的随机数，如果以“面向过程”的思维，那我更多是关注如何去设计一个算法，然后保证比较均衡产生0-10的随机数，而面向对象的思维会更多关注，我找谁来帮我们做这件事，比如Random类，调用其中提供的方法即可。</p>
 <h4 id="02-JDK，JRE，JVM有什么区别？"><a href="#02-JDK，JRE，JVM有什么区别？" class="headerlink" title="02 JDK，JRE，JVM有什么区别？"></a><strong>02 JDK，JRE，JVM有什么区别？</strong></h4><ul>
 <li>JDK ：Java Development Kit，Java开发工具包，提供了Java的开发环境和运行环境。</li>
@@ -229,7 +288,7 @@
 <p>所以，如果只是运行Java程序，只需要安装JRE即可。</p>
 <p>另外注意，JVM是实现Java跨平台的核心，但JVM本身并不是跨平台的，</p>
 <p><strong>不同的平台需要安装不同的JVM</strong></p>
-<p><img src="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-199da3b71771a2ac8a6abca871d2bca2_b.jpg" alt="img" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-199da3b71771a2ac8a6abca871d2bca2_b.jpg" class="lozad post-image"></p>
+<p><img src="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-199da3b71771a2ac8a6abca871d2bca2_b.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
 <h4 id="03-和equals的区别"><a href="#03-和equals的区别" class="headerlink" title="03 ==和equals的区别"></a>03 ==和equals的区别</h4><ol>
 <li>基本数据类型存在栈内存中</li>
 <li>引用数据类型地址值存在栈内存中，引用对象存在堆内存中</li>
@@ -253,18 +312,18 @@
 <li><strong>修饰的是引用类型，引用的指向不能修改</strong></li>
 </ol>
 <p><strong>比如下面的代码是可以的</strong></p>
-<pre class="highlight"><span class="line"><span class="keyword">final</span> Student student = <span class="keyword">new</span> Student(<span class="number">1</span>,<span class="string">&quot;Andy&quot;</span>);</span><br><span class="line">student.setAge(<span class="number">18</span>);<span class="comment">//注意，这个是可以的！</span></span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">final</span> Student student = <span class="hljs-keyword">new</span> Student(<span class="hljs-number">1</span>,<span class="hljs-string">&quot;Andy&quot;</span>);<br>student.setAge(<span class="hljs-number">18</span>);<span class="hljs-comment">//注意，这个是可以的！</span><br></code></pre></td></tr></table></figure>
 
-<pre class="highlight"><span class="line">student = <span class="keyword">new</span> Student();<span class="comment">//这个不可以！</span></span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">student = <span class="hljs-keyword">new</span> Student();<span class="hljs-comment">//这个不可以！</span><br></code></pre></td></tr></table></figure>
 
-<h4 id="05-String-s-“java”与String-s-new-String-“java”"><a href="#05-String-s-“java”与String-s-new-String-“java”" class="headerlink" title="05 String s = “java”与String s = new String(“java”)"></a>05 String s = “java”与String s = new String(“java”)</h4><pre class="highlight"><span class="line">String s = <span class="string">&quot;java&quot;</span>;</span><br></pre>
+<h4 id="05-String-s-“java”与String-s-new-String-“java”"><a href="#05-String-s-“java”与String-s-new-String-“java”" class="headerlink" title="05 String s = “java”与String s = new String(“java”)"></a>05 String s = “java”与String s = new String(“java”)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">String s = <span class="hljs-string">&quot;java&quot;</span>;<br></code></pre></td></tr></table></figure>
 
-<pre class="highlight"><span class="line">String s = <span class="keyword">new</span> String(<span class="string">&quot;java&quot;</span>);</span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">String s = <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;java&quot;</span>);<br></code></pre></td></tr></table></figure>
 
 <p>这两者的内存分配方式是不一样的。</p>
 <p><strong>第一种方式，JVM会将其分配到常量池，而第二种方式是分配到堆内存</strong></p>
 <p>代码案例：测试以下的每道题，你是否能够正确得到答案？</p>
-<pre class="highlight"><span class="line">String s1 = <span class="keyword">new</span> String(<span class="string">&quot;zs&quot;</span>);</span><br><span class="line">String s2 = <span class="keyword">new</span> String(<span class="string">&quot;zs&quot;</span>);</span><br><span class="line">System.out.println(s1 == s2);<span class="comment">//false，存在于两个不同的堆内存</span></span><br><span class="line"></span><br><span class="line">String s3 = <span class="string">&quot;zs&quot;</span>;</span><br><span class="line">String s4 = <span class="string">&quot;zs&quot;</span>;</span><br><span class="line">System.out.println(s3 == s4);<span class="comment">//相当于常量比较，true</span></span><br><span class="line">System.out.println(s3 == s1);<span class="comment">//常量池地址和堆地址,false</span></span><br><span class="line"></span><br><span class="line">String s5 = <span class="string">&quot;zszs&quot;</span>;</span><br><span class="line">String s6 = s3+s4;</span><br><span class="line">System.out.println(s5 == s6);<span class="comment">//false 一个常量池地址，一个堆地址（String是不可变对象，当使用拼接符号时，会new一个新对象，所以是对应堆地址）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> String s7 = <span class="string">&quot;zs&quot;</span>;</span><br><span class="line"><span class="keyword">final</span> String s8 = <span class="string">&quot;zs&quot;</span>;</span><br><span class="line">String s9 = s7+s8;<span class="comment">//对于常量（final修饰），编译器在拼接时会进行优化，拼接后还是常量</span></span><br><span class="line">System.out.println(s5 == s9);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> String s10 = s3+s4;</span><br><span class="line">System.out.println(s5 == s10);<span class="comment">//false 常量池和堆内存</span></span><br><span class="line"></span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java">String s1 = <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;zs&quot;</span>);<br>String s2 = <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;zs&quot;</span>);<br>System.out.println(s1 == s2);<span class="hljs-comment">//false，存在于两个不同的堆内存</span><br><br>String s3 = <span class="hljs-string">&quot;zs&quot;</span>;<br>String s4 = <span class="hljs-string">&quot;zs&quot;</span>;<br>System.out.println(s3 == s4);<span class="hljs-comment">//相当于常量比较，true</span><br>System.out.println(s3 == s1);<span class="hljs-comment">//常量池地址和堆地址,false</span><br><br>String s5 = <span class="hljs-string">&quot;zszs&quot;</span>;<br>String s6 = s3+s4;<br>System.out.println(s5 == s6);<span class="hljs-comment">//false 一个常量池地址，一个堆地址（String是不可变对象，当使用拼接符号时，会new一个新对象，所以是对应堆地址）</span><br><br><span class="hljs-keyword">final</span> String s7 = <span class="hljs-string">&quot;zs&quot;</span>;<br><span class="hljs-keyword">final</span> String s8 = <span class="hljs-string">&quot;zs&quot;</span>;<br>String s9 = s7+s8;<span class="hljs-comment">//对于常量（final修饰），编译器在拼接时会进行优化，拼接后还是常量</span><br>System.out.println(s5 == s9);<span class="hljs-comment">//true</span><br><br><span class="hljs-keyword">final</span> String s10 = s3+s4;<br>System.out.println(s5 == s10);<span class="hljs-comment">//false 常量池和堆内存</span><br><br></code></pre></td></tr></table></figure>
 
 <h4 id="06-String，StringBuffer，StringBuilder区别"><a href="#06-String，StringBuffer，StringBuilder区别" class="headerlink" title="06 String，StringBuffer，StringBuilder区别"></a>06 String，StringBuffer，StringBuilder区别</h4><p><strong>String 跟其他两个类的区别是</strong></p>
 <blockquote>
@@ -278,7 +337,7 @@
 <blockquote>
 <p>前者是线程安全的（每个方法都加了synchronized修饰），后者是线程不安全的。<br>线程不安全性能更高，所以在开发中，优先采用StringBuilder.<strong>因为局部变量每个线程独享，根本不存在线程安全问题。</strong>例如add()方法调用，对应虚拟机栈栈帧，是线程私有的。也即是说每个线程里面都有一份数据，并不会影响操作结果。当多个线程访问同一个资源时才会出现线程安全问题，此时的场景中并不会发生这个问题。<br>StringBuilder &gt; StringBuffer &gt; String</p>
 </blockquote>
-<pre class="highlight"><span class="line">一个对象是线程安全的？</span><br><span class="line">1、多线程环境下</span><br><span class="line">2、对这个对象的访问不加额外的同步控制（synchronized等）</span><br><span class="line">3、操作的数据的结果依然是正确的</span><br></pre>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ada">一个对象是线程安全的？<br><span class="hljs-number">1</span>、多线程环境下<br><span class="hljs-number">2</span>、对这个对象的访问不加额外的同步控制（<span class="hljs-keyword">synchronized</span>等）<br><span class="hljs-number">3</span>、操作的数据的结果依然是正确的<br></code></pre></td></tr></table></figure>
 
 <h4 id="07-接口和抽象类的区别"><a href="#07-接口和抽象类的区别" class="headerlink" title="07 接口和抽象类的区别"></a>07 接口和抽象类的区别</h4><p>这个问题，要分JDK版本来区分回答：</p>
 <ul>
@@ -331,7 +390,7 @@
 <blockquote>
 <p>向上转型：Person person = new Student(); 安全的<br>向下转型：Teacher teacher = (Teacher)person; 不安全的</p>
 </blockquote>
-<h4 id="11-Int和Integer的区别（重点）"><a href="#11-Int和Integer的区别（重点）" class="headerlink" title="11 Int和Integer的区别（重点）"></a>11 Int和Integer的区别（重点）</h4><pre class="highlight"><span class="line">Integer i1 = <span class="keyword">new</span> Integer(<span class="number">12</span>);</span><br><span class="line">      Integer i2 = <span class="keyword">new</span> Integer(<span class="number">12</span>);</span><br><span class="line">      System.out.println(i1 == i2);</span><br><span class="line"></span><br><span class="line">      Integer i3 = <span class="number">126</span>;</span><br><span class="line">      Integer i4 = <span class="number">126</span>;</span><br><span class="line">      <span class="keyword">int</span> i5 = <span class="number">126</span>;</span><br><span class="line">      System.out.println(i3 == i4);</span><br><span class="line">      System.out.println(i3 == i5);</span><br><span class="line"></span><br><span class="line">      Integer i6 = <span class="number">128</span>;</span><br><span class="line">      Integer i7 = <span class="number">128</span>;</span><br><span class="line">      <span class="keyword">int</span> i8 = <span class="number">128</span>;</span><br><span class="line">      System.out.println(i6 == i7);</span><br><span class="line">      System.out.println(i6 == i8);</span><br><span class="line"></span><br><span class="line"></span><br></pre>
+<h4 id="11-Int和Integer的区别（重点）"><a href="#11-Int和Integer的区别（重点）" class="headerlink" title="11 Int和Integer的区别（重点）"></a>11 Int和Integer的区别（重点）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java">Integer i1 = <span class="hljs-keyword">new</span> Integer(<span class="hljs-number">12</span>);<br>      Integer i2 = <span class="hljs-keyword">new</span> Integer(<span class="hljs-number">12</span>);<br>      System.out.println(i1 == i2);<br><br>      Integer i3 = <span class="hljs-number">126</span>;<br>      Integer i4 = <span class="hljs-number">126</span>;<br>      <span class="hljs-keyword">int</span> i5 = <span class="hljs-number">126</span>;<br>      System.out.println(i3 == i4);<br>      System.out.println(i3 == i5);<br><br>      Integer i6 = <span class="hljs-number">128</span>;<br>      Integer i7 = <span class="hljs-number">128</span>;<br>      <span class="hljs-keyword">int</span> i8 = <span class="hljs-number">128</span>;<br>      System.out.println(i6 == i7);<br>      System.out.println(i6 == i8);<br><br><br></code></pre></td></tr></table></figure>
 
 <p>答案揭晓</p>
 <p>分情况来比较</p>
@@ -350,21 +409,21 @@
 <p>源码分析：</p>
 <blockquote>
 <p>当我们写</p>
-<pre class="highlight"><span class="line">Integer i &#x3D; 126</span><br></pre>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Integer</span> i = <span class="hljs-number">126</span><br></code></pre></td></tr></table></figure>
 
 <p>,实际上做了自动装箱：</p>
-<pre class="highlight"><span class="line">Integer i &#x3D; Integer.valueOf(126);</span><br></pre>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">Integer i = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Integer</span>.</span></span>value<span class="hljs-constructor">Of(126)</span>;<br></code></pre></td></tr></table></figure>
 
 <p>分析这段源码</p>
 </blockquote>
-<pre class="highlight"><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">        <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//IntegerCache是Integer的内部类</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">IntegerCache</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> low = -<span class="number">128</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> high;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> Integer cache[];</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="comment">// high value may be configured by property</span></span><br><span class="line">        <span class="keyword">int</span> h = <span class="number">127</span>;</span><br><span class="line"></span><br><span class="line"></span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Integer <span class="hljs-title">valueOf</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)<br>        <span class="hljs-keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Integer(i);<br>&#125;<br><span class="hljs-comment">//IntegerCache是Integer的内部类</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">IntegerCache</span> </span>&#123;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> low = -<span class="hljs-number">128</span>;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> high;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Integer cache[];<br>    <span class="hljs-keyword">static</span> &#123;<br>        <span class="hljs-comment">// high value may be configured by property</span><br>        <span class="hljs-keyword">int</span> h = <span class="hljs-number">127</span>;<br><br><br></code></pre></td></tr></table></figure>
 
 <h4 id="12-方法的重写和重载的区别"><a href="#12-方法的重写和重载的区别" class="headerlink" title="12 方法的重写和重载的区别"></a>12 方法的重写和重载的区别</h4><ul>
 <li>重载：发生在一个类里面，方法名相同，参数列表不同（混淆点：跟返回类型没关系）</li>
 </ul>
 <blockquote>
 <p>以下不构成重载(如果方法名和参数列表一样，在调用方法时不知道选择哪一个)</p>
-<pre class="highlight"><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span></span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">double</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b)</span></span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b)</span></span><br></code></pre></td></tr></table></figure>
 
 
 </blockquote>
@@ -376,7 +435,7 @@
 <blockquote>
 <p>其实，当某次冒泡操作没有数据交换时，说明已经达到了完全有序，不用再继续后续的冒泡操作。</p>
 </blockquote>
-<pre class="highlight"><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(array.length &lt;= <span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//重复n次冒泡</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">        <span class="comment">//是否可以提交退出冒泡的标记</span></span><br><span class="line">        <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">//相邻之间两两比较，并且每次减少一位参与比较</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;array.length-i-<span class="number">1</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(array[j] &gt; array[j+<span class="number">1</span>])&#123;</span><br><span class="line">                <span class="comment">//需要交换</span></span><br><span class="line">                <span class="keyword">int</span> temp = array[j];</span><br><span class="line">                array[j] = array[j+<span class="number">1</span>];</span><br><span class="line">                array[j+<span class="number">1</span>] = temp;</span><br><span class="line">                <span class="comment">//</span></span><br><span class="line">                flag = <span class="keyword">true</span>;<span class="comment">//有数据交换，不能提前退出</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!flag)&#123;</span><br><span class="line">            <span class="comment">//没有数据交换，提前退出冒泡比较</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">bubbleSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] array)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(array.length &lt;= <span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-comment">//重复n次冒泡</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;array.length;i++)&#123;<br>        <span class="hljs-comment">//是否可以提交退出冒泡的标记</span><br>        <span class="hljs-keyword">boolean</span> flag = <span class="hljs-keyword">false</span>;<br>        <span class="hljs-comment">//相邻之间两两比较，并且每次减少一位参与比较</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=<span class="hljs-number">0</span>;j&lt;array.length-i-<span class="hljs-number">1</span>;j++)&#123;<br>            <span class="hljs-keyword">if</span>(array[j] &gt; array[j+<span class="hljs-number">1</span>])&#123;<br>                <span class="hljs-comment">//需要交换</span><br>                <span class="hljs-keyword">int</span> temp = array[j];<br>                array[j] = array[j+<span class="hljs-number">1</span>];<br>                array[j+<span class="hljs-number">1</span>] = temp;<br>                <span class="hljs-comment">//</span><br>                flag = <span class="hljs-keyword">true</span>;<span class="hljs-comment">//有数据交换，不能提前退出</span><br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(!flag)&#123;<br>            <span class="hljs-comment">//没有数据交换，提前退出冒泡比较</span><br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h4 id="15-List和Set的区别"><a href="#15-List和Set的区别" class="headerlink" title="15 List和Set的区别"></a>15 List和Set的区别</h4><ul>
 <li>List（有序，可重复）</li>
@@ -419,7 +478,7 @@
 </ul>
 </li>
 </ul>
-<pre class="highlight"><span class="line"><span class="keyword">int</span> oldCapacity = elementData.length;</span><br><span class="line"><span class="keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);<span class="comment">//位运算更快</span></span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">int</span> oldCapacity = elementData.length;<br><span class="hljs-keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="hljs-number">1</span>);<span class="hljs-comment">//位运算更快</span><br></code></pre></td></tr></table></figure>
 
 <ul>
 <li><ul>
@@ -433,7 +492,7 @@
 </ul>
 </li>
 </ul>
-<pre class="highlight"><span class="line">elementData = Arrays.copyOf(elementData, newCapacity)</span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">elementData = Arrays.copyOf(elementData, newCapacity)<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li><ul>
@@ -466,26 +525,26 @@
 <p>2、增加</p>
 <p><strong>添加到末尾，创建一个新的节点，将之前的last节点设置为新节点的 pre ，新节点设置为last</strong></p>
 <p>我们看下源码：</p>
-<pre class="highlight"><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">linkLast</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//获取到最后一个节点</span></span><br><span class="line">    <span class="keyword">final</span> Node&lt;E&gt; l = last;</span><br><span class="line">    <span class="comment">//构建一个新节点，将当前的last作为这个新节点的pre</span></span><br><span class="line">    <span class="keyword">final</span> Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;&gt;(l, e, <span class="keyword">null</span>);</span><br><span class="line">    <span class="comment">//把last指向新节点</span></span><br><span class="line">    last = newNode;</span><br><span class="line">    <span class="comment">//如果原先没有最后一个节点</span></span><br><span class="line">    <span class="keyword">if</span> (l == <span class="keyword">null</span>)</span><br><span class="line">        <span class="comment">//将first指向新节点</span></span><br><span class="line">        first = newNode;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="comment">//否则，将原先的last的next指向新节点</span></span><br><span class="line">        l.next = newNode;</span><br><span class="line">    size++;</span><br><span class="line">    modCount++;</span><br><span class="line">&#125;</span><br><span class="line">Node节点的定义：内部类</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    E item;</span><br><span class="line">    Node&lt;E&gt; next;</span><br><span class="line">    Node&lt;E&gt; prev;</span><br><span class="line">    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">        <span class="keyword">this</span>.item = element;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">        <span class="keyword">this</span>.prev = prev;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">linkLast</span><span class="hljs-params">(E e)</span> </span>&#123;<br>    <span class="hljs-comment">//获取到最后一个节点</span><br>    <span class="hljs-keyword">final</span> Node&lt;E&gt; l = last;<br>    <span class="hljs-comment">//构建一个新节点，将当前的last作为这个新节点的pre</span><br>    <span class="hljs-keyword">final</span> Node&lt;E&gt; newNode = <span class="hljs-keyword">new</span> Node&lt;&gt;(l, e, <span class="hljs-keyword">null</span>);<br>    <span class="hljs-comment">//把last指向新节点</span><br>    last = newNode;<br>    <span class="hljs-comment">//如果原先没有最后一个节点</span><br>    <span class="hljs-keyword">if</span> (l == <span class="hljs-keyword">null</span>)<br>        <span class="hljs-comment">//将first指向新节点</span><br>        first = newNode;<br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-comment">//否则，将原先的last的next指向新节点</span><br>        l.next = newNode;<br>    size++;<br>    modCount++;<br>&#125;<br>Node节点的定义：内部类<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span>&lt;<span class="hljs-title">E</span>&gt; </span>&#123;<br>    E item;<br>    Node&lt;E&gt; next;<br>    Node&lt;E&gt; prev;<br>    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;<br>        <span class="hljs-keyword">this</span>.item = element;<br>        <span class="hljs-keyword">this</span>.next = next;<br>        <span class="hljs-keyword">this</span>.prev = prev;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>添加到其他位置，这个时候，就需要调整前后节点的引用指向</p>
 <p>3、如何去定义一个双向链表的节点，如上述的源码所示</p>
 <p>4、修改</p>
 <p>修改最后一个节点或者第一个节点，那么就很快（first，last）</p>
 <p>修改其他位置，如果是按坐标来定位节点，则会按照二分查找法，源码如下：</p>
-<pre class="highlight"><span class="line"><span class="keyword">if</span> (index &lt; (size &gt;&gt; <span class="number">1</span>)) &#123;</span><br><span class="line">    Node&lt;E&gt; x = first;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++)</span><br><span class="line">        x = x.next;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    Node&lt;E&gt; x = last;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt; index; i--)</span><br><span class="line">        x = x.prev;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">if</span> (index &lt; (size &gt;&gt; <span class="hljs-number">1</span>)) &#123;<br>    Node&lt;E&gt; x = first;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; index; i++)<br>        x = x.next;<br>    <span class="hljs-keyword">return</span> x;<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    Node&lt;E&gt; x = last;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = size - <span class="hljs-number">1</span>; i &gt; index; i--)<br>        x = x.prev;<br>    <span class="hljs-keyword">return</span> x;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
 <p>5、一个思考题，假如我们可以确定要存储1000个元素，那么采用ArrayList和LinkedList，</p>
 <p>哪个更耗内存，为什么？</p>
-<pre class="highlight"><span class="line">Linkedlist更消耗内存，因为已经确定了元素个数，而LinkedList不仅要存data本身还要额外存pre和next指针。</span><br></pre>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-type">Linkedlist</span>更消耗内存，因为已经确定了元素个数，而<span class="hljs-type">LinkedList</span>不仅要存<span class="hljs-class"><span class="hljs-keyword">data</span>本身还要额外存pre和next指针。</span><br></code></pre></td></tr></table></figure>
 
-<h4 id="17-LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可"><a href="#17-LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可" class="headerlink" title="17 LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可"></a>17 LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可</h4><pre class="highlight"><span class="line">C.pre = A;</span><br><span class="line"></span><br><span class="line">C.next = A.next;</span><br><span class="line"></span><br><span class="line">A.next.pre = C;</span><br><span class="line"></span><br><span class="line">A.next = C;</span><br></pre>
+<h4 id="17-LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可"><a href="#17-LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可" class="headerlink" title="17 LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可"></a>17 LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java">C.pre = A;<br><br>C.next = A.next;<br><br>A.next.pre = C;<br><br>A.next = C;<br></code></pre></td></tr></table></figure>
 
-<h4 id="56-说说常用的聚合函数有哪些及作用？"><a href="#56-说说常用的聚合函数有哪些及作用？" class="headerlink" title="56 说说常用的聚合函数有哪些及作用？"></a>56 说说常用的聚合函数有哪些及作用？</h4><p><img src="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-a3d8312a2f5e4d69c034c64fcb5e91ee_b.jpg" alt="img" srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3C/svg%3E" data-src="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-a3d8312a2f5e4d69c034c64fcb5e91ee_b.jpg" class="lozad post-image"></p>
+<h4 id="56-说说常用的聚合函数有哪些及作用？"><a href="#56-说说常用的聚合函数有哪些及作用？" class="headerlink" title="56 说说常用的聚合函数有哪些及作用？"></a>56 说说常用的聚合函数有哪些及作用？</h4><p><img src="/2021/04/22/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E9%98%B6%E6%AE%B5%E6%80%A7%E6%95%B4%E7%90%86/v2-a3d8312a2f5e4d69c034c64fcb5e91ee_b.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>基本使用语法：</p>
-<pre class="highlight"><span class="line"><span class="keyword">select</span> <span class="built_in">max</span>(age) <span class="keyword">from</span> t_student;</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">min</span>(age) <span class="keyword">from</span> t_student;</span><br></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-built_in">max</span>(age) <span class="hljs-keyword">from</span> t_student;<br><br><span class="hljs-keyword">select</span> <span class="hljs-built_in">min</span>(age) <span class="hljs-keyword">from</span> t_student;<br></code></pre></td></tr></table></figure>
 
 <p>聚合函数经常会结合分组查询，出现在众多的SQL笔试题中，对于SQL笔试题，唯有多练</p>
 <h4 id="57-左连接，右连接，内连接，如何编写-SQL-，他们的区别是什么？"><a href="#57-左连接，右连接，内连接，如何编写-SQL-，他们的区别是什么？" class="headerlink" title="57 左连接，右连接，内连接，如何编写 SQL ，他们的区别是什么？"></a>57 左连接，右连接，内连接，如何编写 SQL ，他们的区别是什么？</h4><p><strong>左连接：以左表为主</strong></p>
@@ -508,283 +567,351 @@
 <p>select t.id t_id,t.<code>name</code> t_name,c.id c_id,c.<code>name</code> c_name</p>
 <p> from t_teacher t INNER JOIN t_class c on t.id=c.t_id; #3条，只展示匹配条件的记录</p>
 
-  </div>
-  <div>
-  
-  </div>
-</article>
-<div class="nav">
-  
-  <div class="nav-item-prev">
-    <a href="/2021/04/22/HashMap底层原理/" class="nav-link">
-      <i class="iconfont icon-left nav-prev-icon"></i>
-      <div>
-        <div class="nav-label">上一篇</div>
-        
-        <div class="nav-title">HashMap底层原理 </div>
-        
-      </div>
-    </a>
-  </div>
-  
-  
-  <div class="nav-item-next">
-    <a href="/2021/04/14/生鲜项目总结/" class="nav-link">
-      <div>
-        <div class="nav-label">下一篇</div>
-        
-        <div class="nav-title">生鲜项目总结 </div>
-        
-      </div>
-      <i class="iconfont icon-right nav-next-icon"></i>
-    </a>
-  </div>
-  
-</div>
-
-<div class="card card-content toc-card" id="mobiletoc">
-  <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>目录</div>
-<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#01-%E8%B0%88%E8%B0%88%E5%AF%B9%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E6%83%B3%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">01 谈谈对面向对象思想的理解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#02-JDK%EF%BC%8CJRE%EF%BC%8CJVM%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">02 JDK，JRE，JVM有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#03-%E5%92%8Cequals%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">03 &#x3D;&#x3D;和equals的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#04-final%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">04 final的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#05-String-s-%E2%80%9Cjava%E2%80%9D%E4%B8%8EString-s-new-String-%E2%80%9Cjava%E2%80%9D"><span class="toc-text">05 String s &#x3D; “java”与String s &#x3D; new String(“java”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#06-String%EF%BC%8CStringBuffer%EF%BC%8CStringBuilder%E5%8C%BA%E5%88%AB"><span class="toc-text">06 String，StringBuffer，StringBuilder区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#07-%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">07 接口和抽象类的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#08-09-N%E7%9A%84%E9%98%B6%E4%B9%98%E5%92%8C%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97"><span class="toc-text">08 09 N的阶乘和斐波那契数列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E4%B8%8A%E8%BD%AC%E5%9E%8B%EF%BC%9F%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B%EF%BC%9F"><span class="toc-text">10 什么是向上转型？什么是向下转型？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-Int%E5%92%8CInteger%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%88%E9%87%8D%E7%82%B9%EF%BC%89"><span class="toc-text">11 Int和Integer的区别（重点）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-%E6%96%B9%E6%B3%95%E7%9A%84%E9%87%8D%E5%86%99%E5%92%8C%E9%87%8D%E8%BD%BD%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">12 方法的重写和重载的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#13-%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="toc-text">13 冒泡排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#15-List%E5%92%8CSet%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">15 List和Set的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#16-%E8%B0%88%E8%B0%88ArrayList%E5%92%8CLinkedList%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">16 谈谈ArrayList和LinkedList的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#17-LinkedList%EF%BC%8C%E8%A6%81%E5%AE%9E%E7%8E%B0%E5%9C%A8A%E5%92%8CB%E4%B9%8B%E9%97%B4%E6%8F%92%E5%85%A5C%EF%BC%8C%E8%AF%A5%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%EF%BC%8C%E7%BC%96%E5%86%99%E4%BC%AA%E4%BB%A3%E7%A0%81%E5%8D%B3%E5%8F%AF"><span class="toc-text">17 LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#56-%E8%AF%B4%E8%AF%B4%E5%B8%B8%E7%94%A8%E7%9A%84%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8F%8A%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-text">56 说说常用的聚合函数有哪些及作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#57-%E5%B7%A6%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%8F%B3%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%86%85%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99-SQL-%EF%BC%8C%E4%BB%96%E4%BB%AC%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">57 左连接，右连接，内连接，如何编写 SQL ，他们的区别是什么？</span></a></li></ol>
-</div></main>
-          <aside class="left-column">
+                
+              </div>
             
-            <div class="card card-author">
-              
-<img src="/img/aze.png" class="author-img">
-
-<p class="author-name">燕树城</p>
-<p class="author-description">花有重开日，人无再少年</p>
-<div class="author-message">
-  <a class="author-posts-count" href="/archives">
-    <span>16</span>
-    <span>文章</span>
-  </a>
-  <a class="author-categories-count" href="/categories">
-    <span>0</span>
-    <span>分类</span>
-  </a>
-  <a class="author-tags-count" href="/tags">
-    <span>9</span>
-    <span>标签</span>
-  </a>
-</div>
-
-            </div>
-            
-            <div class="sticky-tablet">
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
   
   
-  <article class="display-when-two-columns spacer">
-    <div class="card card-content toc-card">
-      <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>目录</div>
-<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#01-%E8%B0%88%E8%B0%88%E5%AF%B9%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E6%83%B3%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">01 谈谈对面向对象思想的理解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#02-JDK%EF%BC%8CJRE%EF%BC%8CJVM%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">02 JDK，JRE，JVM有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#03-%E5%92%8Cequals%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">03 &#x3D;&#x3D;和equals的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#04-final%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">04 final的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#05-String-s-%E2%80%9Cjava%E2%80%9D%E4%B8%8EString-s-new-String-%E2%80%9Cjava%E2%80%9D"><span class="toc-text">05 String s &#x3D; “java”与String s &#x3D; new String(“java”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#06-String%EF%BC%8CStringBuffer%EF%BC%8CStringBuilder%E5%8C%BA%E5%88%AB"><span class="toc-text">06 String，StringBuffer，StringBuilder区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#07-%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">07 接口和抽象类的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#08-09-N%E7%9A%84%E9%98%B6%E4%B9%98%E5%92%8C%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97"><span class="toc-text">08 09 N的阶乘和斐波那契数列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E4%B8%8A%E8%BD%AC%E5%9E%8B%EF%BC%9F%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B%EF%BC%9F"><span class="toc-text">10 什么是向上转型？什么是向下转型？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-Int%E5%92%8CInteger%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%88%E9%87%8D%E7%82%B9%EF%BC%89"><span class="toc-text">11 Int和Integer的区别（重点）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-%E6%96%B9%E6%B3%95%E7%9A%84%E9%87%8D%E5%86%99%E5%92%8C%E9%87%8D%E8%BD%BD%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">12 方法的重写和重载的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#13-%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="toc-text">13 冒泡排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#15-List%E5%92%8CSet%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">15 List和Set的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#16-%E8%B0%88%E8%B0%88ArrayList%E5%92%8CLinkedList%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">16 谈谈ArrayList和LinkedList的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#17-LinkedList%EF%BC%8C%E8%A6%81%E5%AE%9E%E7%8E%B0%E5%9C%A8A%E5%92%8CB%E4%B9%8B%E9%97%B4%E6%8F%92%E5%85%A5C%EF%BC%8C%E8%AF%A5%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%EF%BC%8C%E7%BC%96%E5%86%99%E4%BC%AA%E4%BB%A3%E7%A0%81%E5%8D%B3%E5%8F%AF"><span class="toc-text">17 LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#56-%E8%AF%B4%E8%AF%B4%E5%B8%B8%E7%94%A8%E7%9A%84%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8F%8A%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-text">56 说说常用的聚合函数有哪些及作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#57-%E5%B7%A6%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%8F%B3%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%86%85%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99-SQL-%EF%BC%8C%E4%BB%96%E4%BB%AC%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">57 左连接，右连接，内连接，如何编写 SQL ，他们的区别是什么？</span></a></li></ol>
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java%E5%9F%BA%E7%A1%80/">#Java基础</a>
+      
     </div>
-  </article>
   
-  
-  <article class="card card-content categories-widget">
-    <div class="categories-card">
-  <div class="categories-header"><i class="iconfont icon-fenlei" style="padding-right: 2px;"></i>分类</div>
-  <div class="categories-list">
-    
-  </div>
 </div>
-  </article>
-  
-  <article class="card card-content tags-widget">
-    <div class="tags-card">
-  <div class="tags-header"><i class="iconfont icon-biaoqian" style="padding-right: 2px;"></i>热门标签</div>
-  <div class="tags-list">
-    
-    <a href="/tags/项目功能/" title="项目功能"><div class="tags-list-item">项目功能</div></a>
-    
-    <a href="/tags/MySQL数据库/" title="MySQL数据库"><div class="tags-list-item">MySQL数据库</div></a>
-    
-    <a href="/tags/面经/" title="面经"><div class="tags-list-item">面经</div></a>
-    
-    <a href="/tags/歌词/" title="歌词"><div class="tags-list-item">歌词</div></a>
-    
-    <a href="/tags/项目总结/" title="项目总结"><div class="tags-list-item">项目总结</div></a>
-    
-    <a href="/tags/Java基础/" title="Java基础"><div class="tags-list-item">Java基础</div></a>
-    
-    <a href="/tags/趣事/" title="趣事"><div class="tags-list-item">趣事</div></a>
-    
-    <a href="/tags/JVM/" title="JVM"><div class="tags-list-item">JVM</div></a>
-    
-    <a href="/tags/集合/" title="集合"><div class="tags-list-item">集合</div></a>
-    
-  </div>
-</div>
-  </article>
-  
-  
-  <nav class="header-music">
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="//music.163.com/outchain/player?type=2&id=447926067&auto=1&height=66"></iframe></nav>
 
-</div>
-          </aside>
-          <aside class="right-column">
-            <div class="sticky-widescreen">
+
+              
   
-  
-  <article class="card card-content toc-card">
-    <div class="toc-header"><i class="iconfont icon-menu" style="padding-right: 2px;"></i>目录</div>
-<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#01-%E8%B0%88%E8%B0%88%E5%AF%B9%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E6%80%9D%E6%83%B3%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">01 谈谈对面向对象思想的理解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#02-JDK%EF%BC%8CJRE%EF%BC%8CJVM%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">02 JDK，JRE，JVM有什么区别？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#03-%E5%92%8Cequals%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">03 &#x3D;&#x3D;和equals的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#04-final%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">04 final的作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#05-String-s-%E2%80%9Cjava%E2%80%9D%E4%B8%8EString-s-new-String-%E2%80%9Cjava%E2%80%9D"><span class="toc-text">05 String s &#x3D; “java”与String s &#x3D; new String(“java”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#06-String%EF%BC%8CStringBuffer%EF%BC%8CStringBuilder%E5%8C%BA%E5%88%AB"><span class="toc-text">06 String，StringBuffer，StringBuilder区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#07-%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">07 接口和抽象类的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#08-09-N%E7%9A%84%E9%98%B6%E4%B9%98%E5%92%8C%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97"><span class="toc-text">08 09 N的阶乘和斐波那契数列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E4%B8%8A%E8%BD%AC%E5%9E%8B%EF%BC%9F%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B%EF%BC%9F"><span class="toc-text">10 什么是向上转型？什么是向下转型？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-Int%E5%92%8CInteger%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%88%E9%87%8D%E7%82%B9%EF%BC%89"><span class="toc-text">11 Int和Integer的区别（重点）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-%E6%96%B9%E6%B3%95%E7%9A%84%E9%87%8D%E5%86%99%E5%92%8C%E9%87%8D%E8%BD%BD%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">12 方法的重写和重载的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#13-%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="toc-text">13 冒泡排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#15-List%E5%92%8CSet%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">15 List和Set的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#16-%E8%B0%88%E8%B0%88ArrayList%E5%92%8CLinkedList%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">16 谈谈ArrayList和LinkedList的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#17-LinkedList%EF%BC%8C%E8%A6%81%E5%AE%9E%E7%8E%B0%E5%9C%A8A%E5%92%8CB%E4%B9%8B%E9%97%B4%E6%8F%92%E5%85%A5C%EF%BC%8C%E8%AF%A5%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%EF%BC%8C%E7%BC%96%E5%86%99%E4%BC%AA%E4%BB%A3%E7%A0%81%E5%8D%B3%E5%8F%AF"><span class="toc-text">17 LinkedList，要实现在A和B之间插入C，该如何实现，编写伪代码即可</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#56-%E8%AF%B4%E8%AF%B4%E5%B8%B8%E7%94%A8%E7%9A%84%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8F%8A%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="toc-text">56 说说常用的聚合函数有哪些及作用？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#57-%E5%B7%A6%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%8F%B3%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%86%85%E8%BF%9E%E6%8E%A5%EF%BC%8C%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99-SQL-%EF%BC%8C%E4%BB%96%E4%BB%AC%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">57 左连接，右连接，内连接，如何编写 SQL ，他们的区别是什么？</span></a></li></ol>
-  </article>
-  
-  
-  <article class="card card-content">
-    <div class="recent-posts-card">
-  <div class="recent-posts-header"><i class="iconfont icon-wenzhang_huaban" style="padding-right: 2px;"></i>最近文章</div>
-  <div class="recent-posts-list">
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-08-20</div>
-        <a href="/2021/08/20/开发者边车解谜小游戏/"><div class="recent-posts-item-content">开发者边车解谜小游戏</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-06-23</div>
-        <a href="/2021/06/23/动态代理的形象理解/"><div class="recent-posts-item-content">动态代理的形象理解</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-05-21</div>
-        <a href="/2021/05/21/畅想夏日/"><div class="recent-posts-item-content">畅想夏日</div></a>
-      </div>
-    
-      <div class="recent-posts-item">
-        <div class="recent-posts-item-title">2021-04-27</div>
-        <a href="/2021/04/27/登录接口安全注意事项/"><div class="recent-posts-item-content">登录接口安全注意事项</div></a>
-      </div>
-    
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java基础知识阶段性整理</div>
+      <div>https://sacharn.github.io/2021/04/22/Java基础知识阶段性整理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>John Doe</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年4月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
   </div>
-</div>
-  </article>
-  
-  
-</div>
-          </aside>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/04/22/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="HashMap底层原理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">HashMap底层原理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/14/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" title="生鲜项目总结">
+                        <span class="hidden-mobile">生鲜项目总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
     </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
   </div>
+</div>
+
+
+
+
+
   
-  <footer class="footer">
-  <div class="footer-container">
-    <div>
-      <div class="footer-dsc">
-        <span>Copyright ©
-          
-          2020 -
-          
-          2021
-        </span>
-        &nbsp;
-        <a href="/" class="footer-link">燕子坞 </a>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
+  </div>
+</div>
 
     
-    <div class="footer-dsc">
-      
-      Powered by
-      <a href="https://hexo.io/" class="footer-link" target="_blank" rel="nofollow noopener noreferrer">&nbsp;Hexo </a>
-      
-      
-      <span>&nbsp;|&nbsp;</span>
-      
-      
-      Theme -
-      <a href="https://github.com/theme-kaze" class="footer-link" target="_blank"
-        rel="nofollow noopener noreferrer">&nbsp;Kaze</a>
-      
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
     </div>
-    
-    
-    
-    
-      <div class="footer-dsc">
-        
-        本站总访问量<span id="busuanzi_value_site_pv"></span>次
-        
-        
-        <span>&nbsp;|&nbsp;</span>
-        
-        
-        本站总访客数<span id="busuanzi_value_site_uv"></span>次
-        
-      </div>
-      
-    
-</footer>
-  <a role="button" id="scrollbutton" class="basebutton"  aria-label="回到顶部">
-  <i class="iconfont icon-arrowleft button-icon"></i>
-</a>
-<a role="button" id="menubutton" class="basebutton">
-  <i class="iconfont icon-menu button-icon"></i>
-</a>
-<a role="button" id="popbutton" class="basebutton" aria-label="控制中心">
-  <i class="iconfont icon-expand button-icon"></i>
-</a>
-<a role="button" id="darkbutton" class="basebutton darkwidget" aria-label="夜色模式">
-  <i class="iconfont icon-weather button-icon"></i>
-</a>
-<a role="button" id="searchbutton" class="basebutton searchwidget" aria-label="搜索">
-  <i class="iconfont icon-search button-icon"></i>
-</a>
+  
+  
+  
+  
+</div>
 
-  
-  
-  
-  <script>
-  var addImgLayout = function () {
-    var img = document.querySelectorAll('.post-content img');
-    var i;
-    for (i = 0; i < img.length; i++) {
-      var wrapper = document.createElement('a');
-      wrapper.setAttribute('href', img[i].getAttribute('data-src'));
-      wrapper.setAttribute('aria-label', 'illustration');
-      wrapper.style.cssText = 'width: 100%; display: flex; justify-content: center;';
-      if (img[i].alt) wrapper.dataset.caption = img[i].alt;
-      wrapper.dataset.nolink = true;
-      img[i].before(wrapper);
-      wrapper.append(img[i]);
-      var divWrap = document.createElement('div');
-      divWrap.classList.add('gallery');
-      wrapper.before(divWrap);
-      divWrap.append(wrapper);
-    }
-    baguetteBox.run('.gallery');
-  }
-</script>
-<script>loadScript("/js/lib/lightbox/baguetteBox.min.js", addImgLayout)</script>
-  
-  
-  
-<script src="/js/main.js"></script>
+  </footer>
 
+  <!-- Scripts -->
   
-  <script>loadScript("/js/lib/busuanzi.min.js")</script>
-  
-  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
   <script>
-    var addLazyload = function () {
-      var observer = lozad('.lozad', {
-        load: function (el) {
-          el.srcset = el.getAttribute('data-src');
-        },
-        loaded: function (el) {
-          el.classList.add('loaded');
-        }
-      });
-      observer.observe();
-    }
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
   </script>
-  <script>loadScript("/js/lib/lozad.min.js", addLazyload)</script>
-  
-  
-</body>
 
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
 </html>
