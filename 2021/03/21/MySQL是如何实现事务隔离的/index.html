@@ -13,25 +13,25 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="John Doe">
+  <meta name="author" content="Sacharn">
   <meta name="keywords" content="">
   
     <meta name="description" content="首先，读未提交和串行化都是比较极端的做法，读未提交压根不加锁，所以也没有什么隔离效果，可以理解为无隔离。 其次，串行化。读的时候加共享锁，大家一起读。但是写的时候加排它锁，其他事务既不能并发写，也不能并发读。 最后是读提交和可重复读。这两种隔离级别比较复杂，因为既要允许一定程度的并发，也要兼顾解决问题。  实现可重复读为了解决不可重复读，或者为了实现可重复读，MySQL 采⽤了 MVVC (多版">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL是如何实现事务隔离的">
 <meta property="og:url" content="https://sacharn.github.io/2021/03/21/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%9A%84/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Sacharn">
 <meta property="og:description" content="首先，读未提交和串行化都是比较极端的做法，读未提交压根不加锁，所以也没有什么隔离效果，可以理解为无隔离。 其次，串行化。读的时候加共享锁，大家一起读。但是写的时候加排它锁，其他事务既不能并发写，也不能并发读。 最后是读提交和可重复读。这两种隔离级别比较复杂，因为既要允许一定程度的并发，也要兼顾解决问题。  实现可重复读为了解决不可重复读，或者为了实现可重复读，MySQL 采⽤了 MVVC (多版">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-21T02:35:47.000Z">
 <meta property="article:modified_time" content="2021-12-06T06:34:05.070Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="Sacharn">
 <meta property="article:tag" content="MySQL数据库">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>MySQL是如何实现事务隔离的 - Hexo</title>
+  <title>MySQL是如何实现事务隔离的 - Sacharn</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -349,7 +349,7 @@
       
         <div class="license-meta-item">
           <div>作者</div>
-          <div>John Doe</div>
+          <div>Sacharn</div>
         </div>
       
       
