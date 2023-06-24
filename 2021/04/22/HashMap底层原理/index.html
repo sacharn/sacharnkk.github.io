@@ -13,20 +13,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  <meta name="theme-color" content="#2f4154">
+  <meta name="theme-color" content="#000000">
   <meta name="author" content="Sacharn">
   <meta name="keywords" content="">
   
     <meta name="description" content="HashMaphashMap的默认容量是16，默认扩容因子是0.75，这是综合了空间和时间两个方面考虑的。扩容因子太小，hashMap就会经常扩容，扩容因子太大，就会导致hash冲突现象严重。 hashMap的底层是数组加链表(JDK1.8后改为数组加链表&#x2F;红黑树，一个hash桶的元素大于8并且hashMap的容量大于等于64时，使用红黑树结构，如果桶的元素变为6，就重新变为链表，为什么是6，是为">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HashMap底层原理">
+<meta property="og:title" content="集合 | HashMap底层原理">
 <meta property="og:url" content="https://sacharn.github.io/2021/04/22/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="Sacharn">
 <meta property="og:description" content="HashMaphashMap的默认容量是16，默认扩容因子是0.75，这是综合了空间和时间两个方面考虑的。扩容因子太小，hashMap就会经常扩容，扩容因子太大，就会导致hash冲突现象严重。 hashMap的底层是数组加链表(JDK1.8后改为数组加链表&#x2F;红黑树，一个hash桶的元素大于8并且hashMap的容量大于等于64时，使用红黑树结构，如果桶的元素变为6，就重新变为链表，为什么是6，是为">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://sacharn.github.io/2021/04/22/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/clip_image002.gif">
 <meta property="article:published_time" content="2021-04-22T05:56:08.000Z">
-<meta property="article:modified_time" content="2023-06-18T10:53:00.857Z">
+<meta property="article:modified_time" content="2023-06-24T08:39:35.960Z">
 <meta property="article:author" content="Sacharn">
 <meta property="article:tag" content="集合">
 <meta name="twitter:card" content="summary_large_image">
@@ -36,7 +36,7 @@
   
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
   
-  <title>HashMap底层原理 - Sacharn</title>
+  <title>集合 | HashMap底层原理 - Sacharn</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -238,7 +238,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="HashMap底层原理"></span>
+            <span id="subtitle" data-typed-text="集合 | HashMap底层原理"></span>
           
         </div>
 
@@ -310,7 +310,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">HashMap底层原理</h1>
+            <h1 style="display: none">集合 | HashMap底层原理</h1>
             
             
               <div class="markdown-body">
@@ -375,12 +375,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/note/" class="category-chain-item">note</a>
+  <a href="/categories/Tech/" class="category-chain-item">Tech</a>
   
   
     <span>></span>
     
-  <a href="/categories/note/Tech/" class="category-chain-item">Tech</a>
+  <a href="/categories/Tech/Programmer/" class="category-chain-item">Programmer</a>
   
   
 
@@ -409,7 +409,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>HashMap底层原理</div>
+      <div>集合 | HashMap底层原理</div>
       <div>https://sacharn.github.io/2021/04/22/HashMap底层原理/</div>
     </div>
     <div class="license-meta">
@@ -464,8 +464,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/14/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" title="生鲜项目总结">
-                        <span class="hidden-mobile">生鲜项目总结</span>
+                      <a href="/2021/04/14/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" title="项目 | 生鲜项目总结">
+                        <span class="hidden-mobile">项目 | 生鲜项目总结</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

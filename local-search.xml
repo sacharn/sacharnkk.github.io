@@ -4,7 +4,7 @@
   
   
   <entry>
-    <title>ARTS 计划</title>
+    <title>计划 | ARTS 计划</title>
     <link href="/2023/06/24/ARTS%20%E8%AE%A1%E5%88%92/"/>
     <url>/2023/06/24/ARTS%20%E8%AE%A1%E5%88%92/</url>
     
@@ -13,9 +13,9 @@
     
     <categories>
       
-      <category>note</category>
+      <category>Note</category>
       
-      <category>Tech</category>
+      <category>Plan</category>
       
     </categories>
     
@@ -42,6 +42,8 @@
       
       <category>Tech</category>
       
+      <category>Tool</category>
+      
     </categories>
     
     
@@ -56,7 +58,7 @@
   
   
   <entry>
-    <title>优秀信息摄入汇总</title>
+    <title>合集 | 优秀信息摄入汇总</title>
     <link href="/2023/06/18/%E4%BC%98%E7%A7%80%E4%BF%A1%E6%81%AF%E6%91%84%E5%85%A5%E6%B1%87%E6%80%BB/"/>
     <url>/2023/06/18/%E4%BC%98%E7%A7%80%E4%BF%A1%E6%81%AF%E6%91%84%E5%85%A5%E6%B1%87%E6%80%BB/</url>
     
@@ -90,7 +92,9 @@
     
     <categories>
       
-      <category>趣事</category>
+      <category>Write</category>
+      
+      <category>Record</category>
       
     </categories>
     
@@ -115,9 +119,9 @@
     
     <categories>
       
-      <category>note</category>
+      <category>Write</category>
       
-      <category>Daily</category>
+      <category>Image</category>
       
     </categories>
     
@@ -133,18 +137,18 @@
   
   
   <entry>
-    <title>登录接口安全注意事项</title>
+    <title>项目 | 登录安全</title>
     <link href="/2021/04/27/%E7%99%BB%E5%BD%95%E6%8E%A5%E5%8F%A3%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
     <url>/2021/04/27/%E7%99%BB%E5%BD%95%E6%8E%A5%E5%8F%A3%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</url>
     
-    <content type="html"><![CDATA[<h1 id="登录接口安全"><a href="#登录接口安全" class="headerlink" title="登录接口安全"></a>登录接口安全</h1><h3 id="问题一-暴力破解"><a href="#问题一-暴力破解" class="headerlink" title="问题一 暴力破解"></a>问题一 暴力破解</h3><p>只要网站是暴露在公网的，那么很大概率上会被人盯上，尝试爆破这种简单且有效的方式：<br><strong>通过各种方式获得了网站的用户名之后，通过编写程序来遍历所有可能的密码，直至找到正确的密码为止</strong></p><p>解决方案</p><p>① <strong>验证码校验</strong></p><p>我可以在它密码错误达到一定次数时，增加验证码校验！比如我们设置，当用户密码错误达到3次之后，则需要用户输入图片验证码才可以继续登录操作</p><p><strong>缺陷</strong>：这样确实可以过滤掉一些非法的攻击，但是以目前的OCR技术来说的话，普通的图片验证码真的很难做到有效的防止机器人。</p><p>当然，我们也可以花钱购买类似于三方公司提供的滑动验证等验证方案，但是也并不是100%的安全，一样可以被破解</p><p>②<strong>登录限制</strong></p><p>那这时候又有同学说了，那我可以直接限制非正常用户的登录操作，当它密码错误达到一定次数时，直接拒绝用户的登录，隔一段时间再恢复。比如我们设置某个账号在登录时错误次数达到10次时，则5分钟内拒绝该账号的所有登录操作。</p><p><strong>缺陷</strong>：这样确实可以解决用户密码被爆破的问题。但是，这样会带来另一个风险：攻击者虽然不能获取到网站的用户信息，但是它可以让我们网站所有的用户都无法登录！</p><p>攻击者只需要无限循环遍历所有的用户名（<em>即使没有，随机也行</em>）进行登录，那么这些用户会永远处于锁定状态，导致正常的用户无法登录网站！</p><p>③<strong>IP限制</strong></p><p>既然直接针对用户名不行的话，我们可以针对IP来处理，直接把攻击者的IP封了不就万事大吉了嘛。我们可以设定某个IP下调用登录接口错误次数达到一定时，则禁止该IP进行登录操作。</p><p>缺陷：现在很多学校、公司都是使用同一个出口IP，如果直接按IP限制，可能会误杀其它正常的用户。攻击者完全可以在IP被封后切换VPN来攻击</p><p>④<strong>手机验证</strong></p><p>几乎所有的应用都会让用户绑定手机，一个是国家的实名制政策要求，第二个是手机基本上和身份证一样，基本上可以代表一个人的身份标识了。所以很多安全操作都是基于手机验证来进行的，登录也可以。</p><ol><li>当用户输入密码次数大于3次时，要求用户输入验证码（<em>最好使用滑动验证</em>）</li><li>当用户输入密码次数大于10次时，弹出手机验证，需要用户使用手机验证码和密码双重认证进行登录</li></ol><p>我们结合了上面说的几种方式的同时，加上了手机验证码的验证模式，基本上可以阻止相当多的一部分恶意攻击者。但是<strong>没有系统是绝对安全的，我们只能够尽可能的增加攻击者的攻击成本。大家可以根据自己网站的实际情况来选择合适的策略。</strong></p><h3 id="问题二-中间人攻击"><a href="#问题二-中间人攻击" class="headerlink" title="问题二 中间人攻击"></a>问题二 中间人攻击</h3><h4 id="什么是中间人攻击"><a href="#什么是中间人攻击" class="headerlink" title="什么是中间人攻击"></a><strong>什么是中间人攻击</strong></h4><p>**中间人攻击(man-in-the-middle attack, abbreviated to MITM)**，简单一点来说就是，A和B在通讯过程中，攻击者通过嗅探、拦截等方式获取或修改A和B的通讯内容。</p><p>举个栗子：<code>小白</code>给<code>小黄</code>发快递，途中要经过快递点A，<code>小黑</code>就躲在快递点A，或者干脆自己开一个快递点B来冒充快递点A。然后偷偷的拆了<code>小白</code>给<code>小黄</code>的快递，看看里面有啥东西。甚至可以把<code>小白</code>的快递给留下来，自己再打包一个一毛一样的箱子发给<code>小黄</code>。</p><p>那在登录过程中，如果攻击者在嗅探到了从客户端发往服务端的登录请求，就可以很轻易的获取到用户的用户名和密码。</p><h4 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a><strong>HTTPS</strong></h4><p>防范中间人攻击最简单也是最有效的一个操作，更换HTTPS，把网站中所有的HTTP请求修改为强制使用HTTPS。</p><h4 id="为什么HTTPS可以防范中间人攻击？"><a href="#为什么HTTPS可以防范中间人攻击？" class="headerlink" title="为什么HTTPS可以防范中间人攻击？"></a><strong>为什么HTTPS可以防范中间人攻击？</strong></h4><p>HTTPS实际上就是在HTTP和TCP协议中间加入了SSL/TLS协议，用于保障数据的安全传输。相比于HTTP，HTTPS主要有以下几个特点：</p><ul><li>内容加密</li><li>数据完整性</li><li>身份验证</li></ul><blockquote><p>具体的HTTPS原理这里就不再扩展了，大家可以自行Google</p></blockquote><h4 id="加密传输"><a href="#加密传输" class="headerlink" title="加密传输"></a><strong>加密传输</strong></h4><p>在HTTPS之外，我们还可以手动对敏感数据进行加密传输：</p><ul><li>用户名可以在客户端使用非对称加密，在服务端解密</li><li>密码可以在客户端进行MD5之后传输，防止暴露密码明文</li></ul><h3 id="其它问题"><a href="#其它问题" class="headerlink" title="其它问题"></a><strong>其它</strong>问题</h3><p>除了上面我们聊的这些以外，其实还有很多其它的工作可以考虑，比如：</p><ul><li><p><strong>操作日志</strong>，用户的每次登录和敏感操作都需要记录日志（包括IP、设备等）</p></li><li><p><strong>异常操作或登录提醒</strong>，有了上面的操作日志，那我们就可以基于日志做风险提醒，比如用户在进行非常登录地登录、修改密码、登录异常时，可以短信提醒用户</p></li><li><p><strong>拒绝弱密码</strong> 注册或修改密码时，不允许用户设置弱密码</p></li><li><p><strong>防止用户名被遍历</strong> 有些网站在注册时，在输入完用户名之后，会提示用户名是否存在。这样会存在网站的所有用户名被泄露的风险（<em>遍历该接口即可</em>），需要在交互或逻辑上做限制</p></li><li><p>MD5现在已经不是⼗分安全了，最好使<strong>sha256，sha512</strong>之类安全强度更⾼的散列加密算法。</p></li><li><p>⽤户名密码错误不要单⽅⾯提⽰，如果密码错误提⽰⽤户说密码错误这样攻击者就知道⽤户名是对的，下次攻击密码，所以不管是⽤户名还是密码错误都给出同样的提⽰：<strong>用户名或密码错误</strong>，或者别的不具体的提⽰的错误都可以。</p></li><li><p> 前端禁⽌⽤户输⼊导致<strong>sql注⼊</strong>的字符，后台也要做sql注⼊的防护。</p></li><li><p>不要在cookie中保留⽤户密码，如果⼀定要使⽤cookie实现⾃动登录，切记不要使⽤简单的⽤户名＋密码MD5保存到cookie，要把⽤户ID、⽤户名、过期时间、IP、不固定的salt等⼀起考虑进去，这个当然要可逆，服务端要进⾏解密才能验证⽤户⾃动登录有效。另外，cookie要设置为<strong>http only</strong>,这样就不能通过脚本访问cookie，保证cookie的安全性。</p></li><li><p>有必要的要采⽤<strong>单点登陆</strong>，如果允许⽤户多处登录的要给⽤户安全提醒。</p></li><li><p>可以考虑使⽤<strong>第三方授权登录接⼝</strong>，如qq登录，微信登录，微博登录，github登录等等，优化⽤户登录体验。</p></li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="登录安全"><a href="#登录安全" class="headerlink" title="登录安全"></a>登录安全</h1><h3 id="问题一-暴力破解"><a href="#问题一-暴力破解" class="headerlink" title="问题一 暴力破解"></a>问题一 暴力破解</h3><p>只要网站是暴露在公网的，那么很大概率上会被人盯上，尝试爆破这种简单且有效的方式：<br><strong>通过各种方式获得了网站的用户名之后，通过编写程序来遍历所有可能的密码，直至找到正确的密码为止</strong></p><p>解决方案</p><p>① <strong>验证码校验</strong></p><p>我可以在它密码错误达到一定次数时，增加验证码校验！比如我们设置，当用户密码错误达到3次之后，则需要用户输入图片验证码才可以继续登录操作</p><p><strong>缺陷</strong>：这样确实可以过滤掉一些非法的攻击，但是以目前的OCR技术来说的话，普通的图片验证码真的很难做到有效的防止机器人。</p><p>当然，我们也可以花钱购买类似于三方公司提供的滑动验证等验证方案，但是也并不是100%的安全，一样可以被破解</p><p>②<strong>登录限制</strong></p><p>那这时候又有同学说了，那我可以直接限制非正常用户的登录操作，当它密码错误达到一定次数时，直接拒绝用户的登录，隔一段时间再恢复。比如我们设置某个账号在登录时错误次数达到10次时，则5分钟内拒绝该账号的所有登录操作。</p><p><strong>缺陷</strong>：这样确实可以解决用户密码被爆破的问题。但是，这样会带来另一个风险：攻击者虽然不能获取到网站的用户信息，但是它可以让我们网站所有的用户都无法登录！</p><p>攻击者只需要无限循环遍历所有的用户名（<em>即使没有，随机也行</em>）进行登录，那么这些用户会永远处于锁定状态，导致正常的用户无法登录网站！</p><p>③<strong>IP限制</strong></p><p>既然直接针对用户名不行的话，我们可以针对IP来处理，直接把攻击者的IP封了不就万事大吉了嘛。我们可以设定某个IP下调用登录接口错误次数达到一定时，则禁止该IP进行登录操作。</p><p>缺陷：现在很多学校、公司都是使用同一个出口IP，如果直接按IP限制，可能会误杀其它正常的用户。攻击者完全可以在IP被封后切换VPN来攻击</p><p>④<strong>手机验证</strong></p><p>几乎所有的应用都会让用户绑定手机，一个是国家的实名制政策要求，第二个是手机基本上和身份证一样，基本上可以代表一个人的身份标识了。所以很多安全操作都是基于手机验证来进行的，登录也可以。</p><ol><li>当用户输入密码次数大于3次时，要求用户输入验证码（<em>最好使用滑动验证</em>）</li><li>当用户输入密码次数大于10次时，弹出手机验证，需要用户使用手机验证码和密码双重认证进行登录</li></ol><p>我们结合了上面说的几种方式的同时，加上了手机验证码的验证模式，基本上可以阻止相当多的一部分恶意攻击者。但是<strong>没有系统是绝对安全的，我们只能够尽可能的增加攻击者的攻击成本。大家可以根据自己网站的实际情况来选择合适的策略。</strong></p><h3 id="问题二-中间人攻击"><a href="#问题二-中间人攻击" class="headerlink" title="问题二 中间人攻击"></a>问题二 中间人攻击</h3><h4 id="什么是中间人攻击"><a href="#什么是中间人攻击" class="headerlink" title="什么是中间人攻击"></a><strong>什么是中间人攻击</strong></h4><p>**中间人攻击(man-in-the-middle attack, abbreviated to MITM)**，简单一点来说就是，A和B在通讯过程中，攻击者通过嗅探、拦截等方式获取或修改A和B的通讯内容。</p><p>举个栗子：<code>小白</code>给<code>小黄</code>发快递，途中要经过快递点A，<code>小黑</code>就躲在快递点A，或者干脆自己开一个快递点B来冒充快递点A。然后偷偷的拆了<code>小白</code>给<code>小黄</code>的快递，看看里面有啥东西。甚至可以把<code>小白</code>的快递给留下来，自己再打包一个一毛一样的箱子发给<code>小黄</code>。</p><p>那在登录过程中，如果攻击者在嗅探到了从客户端发往服务端的登录请求，就可以很轻易的获取到用户的用户名和密码。</p><h4 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a><strong>HTTPS</strong></h4><p>防范中间人攻击最简单也是最有效的一个操作，更换HTTPS，把网站中所有的HTTP请求修改为强制使用HTTPS。</p><h4 id="为什么HTTPS可以防范中间人攻击？"><a href="#为什么HTTPS可以防范中间人攻击？" class="headerlink" title="为什么HTTPS可以防范中间人攻击？"></a><strong>为什么HTTPS可以防范中间人攻击？</strong></h4><p>HTTPS实际上就是在HTTP和TCP协议中间加入了SSL/TLS协议，用于保障数据的安全传输。相比于HTTP，HTTPS主要有以下几个特点：</p><ul><li>内容加密</li><li>数据完整性</li><li>身份验证</li></ul><blockquote><p>具体的HTTPS原理这里就不再扩展了，大家可以自行Google</p></blockquote><h4 id="加密传输"><a href="#加密传输" class="headerlink" title="加密传输"></a><strong>加密传输</strong></h4><p>在HTTPS之外，我们还可以手动对敏感数据进行加密传输：</p><ul><li>用户名可以在客户端使用非对称加密，在服务端解密</li><li>密码可以在客户端进行MD5之后传输，防止暴露密码明文</li></ul><h3 id="其它问题"><a href="#其它问题" class="headerlink" title="其它问题"></a><strong>其它</strong>问题</h3><p>除了上面我们聊的这些以外，其实还有很多其它的工作可以考虑，比如：</p><ul><li><p><strong>操作日志</strong>，用户的每次登录和敏感操作都需要记录日志（包括IP、设备等）</p></li><li><p><strong>异常操作或登录提醒</strong>，有了上面的操作日志，那我们就可以基于日志做风险提醒，比如用户在进行非常登录地登录、修改密码、登录异常时，可以短信提醒用户</p></li><li><p><strong>拒绝弱密码</strong> 注册或修改密码时，不允许用户设置弱密码</p></li><li><p><strong>防止用户名被遍历</strong> 有些网站在注册时，在输入完用户名之后，会提示用户名是否存在。这样会存在网站的所有用户名被泄露的风险（<em>遍历该接口即可</em>），需要在交互或逻辑上做限制</p></li><li><p>MD5现在已经不是⼗分安全了，最好使<strong>sha256，sha512</strong>之类安全强度更⾼的散列加密算法。</p></li><li><p>⽤户名密码错误不要单⽅⾯提⽰，如果密码错误提⽰⽤户说密码错误这样攻击者就知道⽤户名是对的，下次攻击密码，所以不管是⽤户名还是密码错误都给出同样的提⽰：<strong>用户名或密码错误</strong>，或者别的不具体的提⽰的错误都可以。</p></li><li><p> 前端禁⽌⽤户输⼊导致<strong>sql注⼊</strong>的字符，后台也要做sql注⼊的防护。</p></li><li><p>不要在cookie中保留⽤户密码，如果⼀定要使⽤cookie实现⾃动登录，切记不要使⽤简单的⽤户名＋密码MD5保存到cookie，要把⽤户ID、⽤户名、过期时间、IP、不固定的salt等⼀起考虑进去，这个当然要可逆，服务端要进⾏解密才能验证⽤户⾃动登录有效。另外，cookie要设置为<strong>http only</strong>,这样就不能通过脚本访问cookie，保证cookie的安全性。</p></li><li><p>有必要的要采⽤<strong>单点登陆</strong>，如果允许⽤户多处登录的要给⽤户安全提醒。</p></li><li><p>可以考虑使⽤<strong>第三方授权登录接⼝</strong>，如qq登录，微信登录，微博登录，github登录等等，优化⽤户登录体验。</p></li></ul>]]></content>
     
     
     <categories>
       
-      <category>note</category>
-      
       <category>Tech</category>
+      
+      <category>Programmer</category>
       
     </categories>
     
@@ -169,9 +173,9 @@
     
     <categories>
       
-      <category>note</category>
-      
       <category>Tech</category>
+      
+      <category>Study</category>
       
     </categories>
     
@@ -187,7 +191,7 @@
   
   
   <entry>
-    <title>HashMap底层原理</title>
+    <title>集合 | HashMap底层原理</title>
     <link href="/2021/04/22/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"/>
     <url>/2021/04/22/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</url>
     
@@ -196,9 +200,9 @@
     
     <categories>
       
-      <category>note</category>
-      
       <category>Tech</category>
+      
+      <category>Programmer</category>
       
     </categories>
     
@@ -214,7 +218,7 @@
   
   
   <entry>
-    <title>生鲜项目总结</title>
+    <title>项目 | 生鲜项目总结</title>
     <link href="/2021/04/14/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/"/>
     <url>/2021/04/14/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/</url>
     
@@ -223,9 +227,9 @@
     
     <categories>
       
-      <category>note</category>
-      
       <category>Tech</category>
+      
+      <category>Programmer</category>
       
     </categories>
     
@@ -241,7 +245,7 @@
   
   
   <entry>
-    <title>生鲜项目中的实现细节</title>
+    <title>项目 | 生鲜项目中的实现细节</title>
     <link href="/2021/03/22/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82/"/>
     <url>/2021/03/22/%E7%94%9F%E9%B2%9C%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82/</url>
     
@@ -250,9 +254,9 @@
     
     <categories>
       
-      <category>note</category>
-      
       <category>Tech</category>
+      
+      <category>Programmer</category>
       
     </categories>
     
@@ -277,7 +281,7 @@
     
     <categories>
       
-      <category>收集</category>
+      <category>文字</category>
       
     </categories>
     
@@ -293,7 +297,7 @@
   
   
   <entry>
-    <title>JVM知识问答总结</title>
+    <title>JVM | JVM知识问答总结</title>
     <link href="/2021/03/21/JVM%E7%9F%A5%E8%AF%86%E9%97%AE%E7%AD%94%E6%80%BB%E7%BB%93/"/>
     <url>/2021/03/21/JVM%E7%9F%A5%E8%AF%86%E9%97%AE%E7%AD%94%E6%80%BB%E7%BB%93/</url>
     
@@ -302,9 +306,9 @@
     
     <categories>
       
-      <category>note</category>
-      
       <category>Tech</category>
+      
+      <category>Programmer</category>
       
     </categories>
     
@@ -320,7 +324,7 @@
   
   
   <entry>
-    <title>2022年秋招面试总结</title>
+    <title>总结 | 2022年秋招面试总结</title>
     <link href="/2021/03/21/2022%E5%B9%B4%E7%A7%8B%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/"/>
     <url>/2021/03/21/2022%E5%B9%B4%E7%A7%8B%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/</url>
     
@@ -329,9 +333,9 @@
     
     <categories>
       
-      <category>note</category>
+      <category>Note</category>
       
-      <category>Tech</category>
+      <category>Summary</category>
       
     </categories>
     
@@ -347,7 +351,7 @@
   
   
   <entry>
-    <title>MySQL是如何实现事务隔离的</title>
+    <title>MySQL | MySQL是如何实现事务隔离的</title>
     <link href="/2021/03/21/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%9A%84/"/>
     <url>/2021/03/21/MySQL%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%9A%84/</url>
     
@@ -356,9 +360,9 @@
     
     <categories>
       
-      <category>note</category>
-      
       <category>Tech</category>
+      
+      <category>Programmer</category>
       
     </categories>
     
@@ -374,7 +378,7 @@
   
   
   <entry>
-    <title>MySQL事务隔离级别原理</title>
+    <title>MySQL | MySQL事务隔离级别原理</title>
     <link href="/2021/03/20/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"/>
     <url>/2021/03/20/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</url>
     
@@ -383,9 +387,9 @@
     
     <categories>
       
-      <category>note</category>
-      
       <category>Tech</category>
+      
+      <category>Programmer</category>
       
     </categories>
     
@@ -410,7 +414,9 @@
     
     <categories>
       
-      <category>趣事</category>
+      <category>Write</category>
+      
+      <category>Record</category>
       
     </categories>
     
